@@ -1,0 +1,86 @@
+# London Scam - Social Engineering Demo
+#
+# Based on real transcript from:
+# https://rake.sh/2009/01/20/facebook-fraud-a-transcript/
+#
+# This demonstrates how attackers use compromised social media
+# accounts to social engineer victims.
+
+meta:
+  title: "London Scam - Social Engineering Demo"
+  description: "How attackers use compromised accounts to social engineer victims via chat"
+  theme: chat
+  articleUrl: "/bots-chatting-on-social-networks"
+  annotationLabel: "Security Note"
+
+scenarios:
+  - id: main
+    title: "London Scam"
+    participants:
+      - id: attacker
+        label: "Matt (compromised account)"
+        role: left
+      - id: victim
+        label: "Rakesh"
+        role: right
+    steps:
+      - type: message
+        from: attacker
+        content: "hi. whats up?"
+
+      - type: message
+        from: victim
+        content: "Hi Matt. Everything OK?"
+
+      - type: annotation
+        content: "The attacker establishes rapport using the victim's friend's account. Notice how the response seems normal at first."
+
+      - type: message
+        from: attacker
+        content: "well, im really stuck here in london. i had to visit a resort here in london and i got robbed at the hotel im staying"
+
+      - type: annotation
+        content: "The scam begins. The attacker creates urgency with a crisis story. The 'London emergency' is one of the most common social engineering pretexts."
+
+      - type: message
+        from: victim
+        content: "Oh no! Are you OK? Did you call the police?"
+
+      - type: message
+        from: attacker
+        content: "yes i did, but they said it might take a while to get my stuff back. the problem is i need to pay my hotel bill and get a flight home"
+
+      - type: annotation
+        content: "The attacker builds on the crisis, establishing a clear financial need. They're setting up the ask."
+
+      - type: message
+        from: attacker
+        content: "i was wondering if you could help me out with some money? ill pay you back as soon as i get home"
+
+      - type: transition
+        content: "This is where the scam becomes explicit. The attacker asks for money."
+
+      - type: message
+        from: victim
+        content: "How much do you need? And how would I send it?"
+
+      - type: message
+        from: attacker
+        content: "about $1500 would cover the hotel and flight. you can send it through western union - its the fastest way"
+
+      - type: annotation
+        content: "Western Union is the preferred method because transfers are difficult to trace or reverse. This is a major red flag."
+
+      - type: message
+        from: victim
+        content: "That's a lot of money. Can't you call the embassy or your bank?"
+
+      - type: message
+        from: attacker
+        content: "i tried but they said it would take days. please, i really need your help. i promise ill pay you back"
+
+      - type: annotation
+        content: "The attacker increases pressure and appeals to friendship. Real friends would understand delays - scammers push urgency."
+
+      - type: transition
+        content: "Red flags in this conversation: urgency, money request, Western Union, resistance to alternatives"

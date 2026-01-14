@@ -1,0 +1,32 @@
+meta:
+  title: Example Conversation
+  description: A test scenario to evaluate the UI.
+  theme: chat
+
+scenarios:
+  - id: scenario1
+    title: Basic Chat
+    participants:
+      - id: user
+        label: User
+        role: left
+      - id: ai
+        label: Assistant
+        role: right
+    steps:
+      - type: message
+        from: user
+        content: "Hello, can you help me with something?"
+      - type: message
+        from: ai
+        content: "Of course! What do you need help with?"
+      - type: annotation
+        content: "The assistant is ready to help."
+      - type: message
+        from: user
+        content: "I want to improve my project's design."
+      - type: transition
+        content: "Processing request..."
+      - type: message
+        from: ai
+        content: "I can definitely help with that. Let's look at the code."

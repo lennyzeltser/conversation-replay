@@ -1,0 +1,190 @@
+# Multi-scenario demo: AI-Assisted IR Report Writing
+# Demonstrates the tab system with three scenarios
+#
+# Based on: https://zeltser.com/good-ir-reports-with-ai
+
+meta:
+  title: "AI-Assisted IR Report Writing"
+  description: "Using AI tools to create, review, and improve incident response documentation"
+  theme: chat
+  autoAdvance: true
+
+scenarios:
+  - id: create
+    title: "IR Report Creation"
+    participants:
+      - id: analyst
+        label: "Security Analyst"
+        role: left
+      - id: ai
+        label: "AI Assistant"
+        role: right
+    steps:
+      - type: message
+        from: analyst
+        content: "I need to create an IR report for a BEC incident. The CFO received a fraudulent wire transfer request that appeared to be from the CEO."
+
+      - type: message
+        from: ai
+        content: "I can help you draft that IR report. Let me ask a few questions first to ensure we capture all the relevant details."
+
+      - type: annotation
+        content: "The AI uses a structured approach to gather incident details systematically."
+
+      - type: message
+        from: ai
+        content: "When was the incident discovered, and what was the initial indicator that something was wrong?"
+
+      - type: message
+        from: analyst
+        content: "Discovered yesterday at 2pm when the CFO called the CEO to confirm the transfer. The CEO had no knowledge of the request."
+
+      - type: message
+        from: ai
+        content: "Good catch by the CFO. What was the requested transfer amount and where was it supposed to go?"
+
+      - type: message
+        from: analyst
+        content: "$47,500 to an account at First National Bank, routing number ending in 4521."
+
+      - type: message
+        from: ai
+        content: "Based on what you've shared, here's a draft executive summary:"
+        codeBlock: |
+          EXECUTIVE SUMMARY
+
+          On [date], a Business Email Compromise (BEC) attempt
+          targeted our organization. An attacker impersonating
+          the CEO requested a $47,500 wire transfer from the CFO.
+
+          The attack was detected before funds were transferred
+          when the CFO verbally confirmed the request with the CEO.
+
+          Immediate actions: Email headers analyzed, account
+          security reviewed, finance team alerted to new protocols.
+
+      - type: transition
+        content: "The analyst continues building the full report..."
+
+  - id: review
+    title: "IR Report Review"
+    participants:
+      - id: analyst
+        label: "Security Analyst"
+        role: left
+      - id: ai
+        label: "AI Assistant"
+        role: right
+    steps:
+      - type: message
+        from: analyst
+        content: "Can you review this section of my IR report? I want to make sure it's clear for executives."
+        codeBlock: |
+          The threat actor utilized sophisticated social engineering
+          techniques leveraging compromised email infrastructure to
+          perpetrate a financial fraud attempt via BEC methodology.
+
+      - type: annotation
+        content: "The AI identifies jargon and passive voice that could confuse non-technical readers."
+
+      - type: message
+        from: ai
+        content: "This section could be clearer for executives. Here are specific suggestions:"
+
+      - type: message
+        from: ai
+        content: "1. 'sophisticated social engineering techniques' - What specifically made it sophisticated? Was it personalized?"
+        footnote: "Executives appreciate specifics over vague adjectives"
+
+      - type: message
+        from: ai
+        content: "2. 'leveraging compromised email infrastructure' - Whose email was compromised? The CEO's? An external vendor's?"
+
+      - type: message
+        from: ai
+        content: "3. 'perpetrate a financial fraud attempt via BEC methodology' - This is passive and jargon-heavy. Try: 'The attacker posed as our CEO to request a fraudulent wire transfer.'"
+
+      - type: message
+        from: analyst
+        content: "Good points. Let me revise that paragraph."
+
+      - type: message
+        from: analyst
+        content: "Revised version:"
+        codeBlock: |
+          An attacker gained access to the CEO's email account
+          and sent a convincing wire transfer request to the CFO.
+          The email matched the CEO's writing style and referenced
+          an actual pending acquisition, showing the attacker had
+          researched our company.
+
+      - type: message
+        from: ai
+        content: "Much better. This version is specific, active voice, and tells executives exactly what happened without requiring security background knowledge."
+
+  - id: coach
+    title: "Writing Coach"
+    participants:
+      - id: analyst
+        label: "Security Analyst"
+        role: left
+      - id: ai
+        label: "Writing Coach"
+        role: right
+    steps:
+      - type: message
+        from: analyst
+        content: "I struggle with executive summaries. They either end up too technical or too vague. Any tips?"
+
+      - type: message
+        from: ai
+        content: "Executive summaries for IR reports should answer four questions in plain language:"
+
+      - type: message
+        from: ai
+        content: "1. WHAT happened? (One sentence describing the incident)"
+
+      - type: message
+        from: ai
+        content: "2. WHAT's the impact? (Business terms: financial, operational, reputational)"
+
+      - type: message
+        from: ai
+        content: "3. WHAT did we do? (Immediate response actions)"
+
+      - type: message
+        from: ai
+        content: "4. WHAT's next? (Recommended follow-up actions)"
+
+      - type: annotation
+        content: "This framework helps analysts structure their thinking and ensures coverage of key points."
+
+      - type: message
+        from: analyst
+        content: "That's helpful. What about tone? My manager says my reports sound too alarmist."
+
+      - type: message
+        from: ai
+        content: "Good question. Compare these two approaches:"
+        codeBlock: |
+          ALARMIST:
+          "A catastrophic security breach nearly resulted in
+          massive financial losses. Urgent action is required
+          immediately to prevent future attacks."
+
+          MEASURED:
+          "A BEC attempt was detected and blocked before any
+          funds transferred. We recommend three process
+          improvements to reduce future risk."
+
+      - type: message
+        from: ai
+        content: "The measured version states facts, acknowledges what went right, and focuses on actionable improvements rather than fear."
+
+      - type: message
+        from: analyst
+        content: "I see the difference. Facts over fear, and focus on what we're doing about it."
+
+      - type: message
+        from: ai
+        content: "Exactly. Executives want to know the situation is under control and what resources you need. Alarmist language undermines confidence in the security team."
