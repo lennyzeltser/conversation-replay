@@ -5,7 +5,7 @@
  */
 
 import { parse } from 'yaml';
-import type { Demo, DemoMeta, Scenario, Step, Participant, Theme, ColorConfig, TimerStyle, CornerStyle, SpeedConfig } from './types';
+import type { Demo, DemoMeta, Scenario, Step, MessageStep, Participant, Theme, ColorConfig, TimerStyle, CornerStyle, SpeedConfig } from './types';
 
 const VALID_THEMES: Theme[] = ['chat', 'email', 'slack', 'terminal', 'generic'];
 const VALID_TIMER_STYLES: TimerStyle[] = ['bar', 'circle'];
@@ -384,7 +384,7 @@ function validateSteps(
         throw new ParseError(`${stepPrefix}.content is required for message`, filePath);
       }
 
-      const result: Step = {
+      const result: MessageStep = {
         type: 'message',
         from,
         content: step.content.trim(),
@@ -394,14 +394,14 @@ function validateSteps(
         if (typeof step.codeBlock !== 'string') {
           throw new ParseError(`${stepPrefix}.codeBlock must be a string`, filePath);
         }
-        (result as any).codeBlock = step.codeBlock;
+        result.codeBlock = step.codeBlock;
       }
 
       if (step.footnote !== undefined) {
         if (typeof step.footnote !== 'string') {
           throw new ParseError(`${stepPrefix}.footnote must be a string`, filePath);
         }
-        (result as any).footnote = step.footnote.trim();
+        result.footnote = step.footnote.trim();
       }
 
       return result;

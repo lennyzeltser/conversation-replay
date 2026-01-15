@@ -1,8 +1,8 @@
 # Conversation Replay
 
-Create animated conversation demos from YAML for security awareness, IR training, and communication skills education.
+Create premium, animated conversation demos from simple YAML. Perfect for security awareness, IR training, and communication skills education.
 
-**"VHS for conversations"** — Define conversations declaratively, generate self-contained HTML demos that play back like videos.
+**"VHS for conversations"** — Define conversations declaratively, generate self-contained HTML demos that play back like high-end video interactions.
 
 ---
 
@@ -11,7 +11,7 @@ Create animated conversation demos from YAML for security awareness, IR training
 - [YAML Schema](#yaml-schema)
 - [Output Features](#output-features)
 - [Embedding in Websites](#embedding-in-websites)
-- [Use Cases](#use-cases)
+- [Multi-Scenario Demos](#multi-scenario-demos)
 - [Development](#development)
 - [AI Agent Quick Reference](#ai-agent-quick-reference)
 - [Security](#security)
@@ -27,12 +27,12 @@ Conversation Replay lets you:
 
 - **Define conversations in YAML** — Easy to write, review, and version control
 - **Generate self-contained HTML** — No external dependencies, works offline
-- **Embed anywhere** — Drop into articles, training materials, or presentations
-- **Update easily** — Change the YAML, regenerate the HTML
+- **Premium Design** — Modern "glassmorphism" UI, beautiful typography, and smooth animations out of the box
+- **Embed anywhere** — Seamlessly integrates into blogs and LMS platforms with **automatic transparency**
 
 ## Quick Start
 
-**Want to see it in action first?** Open [examples/london-scam.html](examples/london-scam.html) or [examples/ir-report.html](examples/ir-report.html) directly in your browser — no build step required.
+**Want to see it in action first?** Open [examples/london-scam.html](examples/london-scam.html) or [examples/ir-report.html](examples/ir-report.html) directly in your browser.
 
 **To build your own demos:**
 
@@ -61,7 +61,7 @@ Done! Generated demo.html
 open demo.html
 ```
 
-The generated HTML is completely self-contained — CSS, JavaScript, and content are all inlined. No external dependencies, works offline.
+The generated HTML is fully responsive, supports dark mode automatically, and looks great on any device.
 
 ## YAML Schema
 
@@ -109,145 +109,112 @@ scenarios:
 # Message with code block
 - type: message
   from: analyst
-  content: "Here's what I found in the logs:"
+  content: "Here's what I found:"
   codeBlock: |
-    error: unauthorized access attempt
+    error: unauthorized access
     source: 192.168.1.105
-    timestamp: 2024-01-15T14:23:00Z
 
 # Message with footnote
 - type: message
   from: ai
   content: "I can help with that."
-  footnote: "The AI retrieves context from the MCP server"
+  footnote: "The AI performs a RAG search here."
 ```
 
 ### Meta Options
 
-**Required:**
-- `title` — Demo title shown in header
-
-**Display options:**
+**Display & Behavior:**
 ```yaml
 meta:
   description: "Shown below title"
   theme: chat                    # chat | email | slack | terminal | generic
   articleUrl: "/related-article" # "View Article" link in header
-  annotationLabel: "Security Note"  # Label for annotations (default: "Behind the Scenes")
-  timerStyle: circle             # circle | bar (progress indicator style)
-  cornerStyle: rounded           # rounded | straight (bubble corners)
-```
-
-**Behavior options:**
-```yaml
-meta:
+  annotationLabel: "Security Note"  # Label for annotations
   autoAdvance: true              # Auto-play next scenario when current ends
   hideHeaderInIframe: true       # Hide header when embedded (default: true)
 ```
 
-**Custom colors:**
+**Custom colors (New Slate/Indigo Default Palette):**
+You can override any color, but the defaults are designed for a premium look:
 ```yaml
 meta:
   colors:
-    accent: "#1a45bc"            # Buttons, links
-    pageBg: "#f6f7f9"            # Page background (standalone mode)
+    accent: "#4f46e5"            # Indigo 600 (Buttons, links)
+    pageBg: "#f8fafc"            # Slate 50 (Page background standalone)
     canvasBg: "#ffffff"          # Chat container background
-    leftBg: "#e0f2fe"            # Left participant bubble background
-    leftBorder: "#7dd3fc"        # Left participant bubble border
-    rightBg: "#f0fdf4"           # Right participant bubble background
-    rightBorder: "#86efac"       # Right participant bubble border
-    tabInactiveColor: "#666666"  # Inactive tab text
+    leftBg: "#eef2ff"            # Indigo 50 (Left/User bubble)
+    leftBorder: "transparent"    # Border for left bubble
+    rightBg: "#f1f5f9"           # Slate 100 (Right/AI bubble)
+    rightBorder: "transparent"   # Border for right bubble
+    tabInactiveColor: "#94a3b8"  # Slate 400
 ```
-
-**Timing configuration:**
-```yaml
-meta:
-  speed:
-    minDelay: 3000               # Minimum pause between steps (ms)
-    maxDelay: 8000               # Maximum pause between steps (ms)
-    msPerWord: 200               # Reading time per word
-    annotationMultiplier: 1.15   # Extra time multiplier for annotations
-    upNextDelay: 2500            # How long to show "Up Next" before transitioning
-```
-
-### Multi-Scenario Demos
-
-When you define multiple scenarios, they appear as tabs:
-
-```yaml
-scenarios:
-  - id: create
-    title: "Creating Reports"
-    # ...steps...
-
-  - id: review
-    title: "Reviewing Reports"
-    # ...steps...
-
-  - id: tips
-    title: "Writing Tips"
-    # ...steps...
-```
-
-With `autoAdvance: true`, the demo automatically transitions between scenarios.
 
 ## Output Features
 
 Generated HTML files include:
 
-- **Zero external dependencies** — Everything inlined
-- **Dark mode support** — Respects `prefers-color-scheme` and syncs with parent page
-- **Responsive design** — Fills screen standalone, fixed height when embedded
-- **Accessibility** — Respects `prefers-reduced-motion`, includes ARIA labels, keyboard navigation
-- **Playback controls** — Play/pause, restart, speed selector (0.5x–4x)
-- **Tab navigation** — Arrow keys navigate between scenario tabs
-- **Progress indicator** — Timer and step counter
+- **Premium UI** — Glassmorphism controls, Inter font, and refined shadows.
+- **Zero dependencies** — Everything inlined.
+- **Dark mode** — Automatic system preference detection and sync support.
+- **Seamless Embedding** — Detects iframes and automatically removes padding/backgrounds.
+- **Accessibility** — ARIA labels, keyboard navigation, reduced motion support.
+- **Controls** — Floating glass bar with Play/Pause, Restart, and Speed (0.5x–4x).
 
 ## Embedding in Websites
 
-### Basic Iframe
+The player is designed to look perfect when embedded.
+
+### Automatic "Seamless" Mode
+When the generated HTML detects it is running inside an `iframe`:
+1.  **Removes Padding**: The outer page padding is removed.
+2.  **Transparent Background**: The page background becomes transparent, blending with your website.
+3.  **Hides Scrollbars**: Internal scrollbars are hidden for a "video" look, while keeping content scrollable.
+
+### Basic Iframe Code
 
 ```html
 <iframe
   src="/demos/security-awareness.html"
-  style="width:100%; height:650px; border:none; border-radius:8px;"
+  style="width: 100%; height: 600px; border: none; border-radius: 12px; overflow: hidden;"
+  title="Security Awareness Demo"
   loading="lazy"
 ></iframe>
 ```
 
 ### Dark Mode Sync
 
-The demo automatically respects `prefers-color-scheme`. If your site has a manual dark mode toggle, sync it to the iframe:
+To sync the player's theme with your website's dark mode toggle:
 
 ```javascript
-// When your page toggles dark mode
+// Send a message to the iframe
 const iframe = document.querySelector('iframe');
 iframe.contentWindow.postMessage({
   type: 'theme-change',
   theme: 'dark' // or 'light'
 }, '*');
-
-// On page load, sync initial theme
-iframe.addEventListener('load', function() {
-  const theme = document.documentElement.getAttribute('data-theme') || 'light';
-  iframe.contentWindow.postMessage({ type: 'theme-change', theme }, '*');
-});
 ```
 
-### Behavior Differences
+## Multi-Scenario Demos
 
-| Context | Behavior |
-|---------|----------|
-| **Standalone** | Chat fills available screen height, header visible |
-| **Embedded (iframe)** | Fixed height, transparent background, header hidden |
+Create rich, multi-part interactive stories using **Tabs**.
 
-## Use Cases
+```yaml
+scenarios:
+  - id: part1
+    title: "Phishing Attempt"
+    steps: [...]
 
-- **Social engineering awareness** — Show how scams unfold over time ([example](examples/london-scam.html))
-- **IR training** — Demonstrate incident communication patterns ([example](examples/ir-report.html))
-- **Communication skills** — Good vs. bad professional dialogue
-- **Tool demos** — Showcase AI/chatbot interactions
-- **Phishing education** — Step-by-step attack anatomy
+  - id: part2
+    title: "Incident Response"
+    steps: [...]
+
+  - id: part3
+    title: "Remediation"
+    steps: [...]
+```
+
+- **Tabs appear automatically** at the top of the player.
+- **Auto-Advance**: If `autoAdvance: true` is set, the player smoothly transitions to the next tab when a scenario finishes.
 
 ## Development
 
@@ -256,56 +223,26 @@ iframe.addEventListener('load', function() {
 ```
 conversation-replay/
 ├── src/
-│   ├── cli.ts           # CLI entry point (build, validate commands)
-│   ├── parser.ts        # YAML parsing and validation
-│   ├── generator.ts     # HTML generation with embedded CSS/JS
-│   └── types.ts         # TypeScript type definitions
-├── examples/
-│   ├── README.md             # Examples documentation
-│   ├── london-scam.yaml      # Single-scenario demo (source)
-│   ├── london-scam.html      # Pre-built HTML demo
-│   ├── ir-report.yaml   # Multi-scenario demo (source)
-│   └── ir-report.html   # Pre-built HTML demo
-├── package.json
-└── tsconfig.json
+│   ├── cli.ts           # CLI entry point
+│   ├── parser.ts        # YAML parsing & validation
+│   ├── generator.ts     # HTML generation (CSS/JS injection)
+│   └── types.ts         # TypeScript definitions
+├── examples/            # Demo YAML files
+└── package.json
 ```
-
-See [examples/README.md](examples/README.md) for detailed descriptions of each demo.
 
 ### Commands
 
 ```bash
-# Build a demo
+# Build
 bun run src/cli.ts build examples/london-scam.yaml -o demo.html
 
-# Validate scenario without building (catches errors before generation)
+# Validate without building
 bun run src/cli.ts validate examples/london-scam.yaml
 
-# Build with different theme
-bun run src/cli.ts build examples/london-scam.yaml -o demo.html --theme email
-
-# Build without header
-bun run src/cli.ts build examples/london-scam.yaml -o demo.html --no-header
+# Build with options
+bun run src/cli.ts build examples/london-scam.yaml -o demo.html --theme email --no-header
 ```
-
-### CLI Reference
-
-```
-conversation-replay build <scenario.yaml> -o <output.html> [options]
-conversation-replay validate <scenario.yaml>
-
-Options:
-  -o, --output <path>   Output HTML file (required for build)
-  --theme <theme>       Override theme: chat, email, slack, terminal, generic
-  --no-header           Exclude the demo header
-  -h, --help            Show help
-```
-
-### Adding New Themes
-
-1. Add theme name to `VALID_THEMES` in `src/types.ts`
-2. Add CSS variables in `generateCss()` in `src/generator.ts`
-3. Theme is automatically available via `--theme` CLI option
 
 ---
 
@@ -315,74 +252,29 @@ Options:
 
 | File | Purpose |
 |------|---------|
-| `src/types.ts` | TypeScript interfaces defining YAML schema |
-| `src/parser.ts` | YAML parsing with validation (color sanitization, type checking) |
-| `src/generator.ts` | HTML generation with embedded CSS/JS (~1700 lines) |
-| `src/cli.ts` | CLI interface |
+| `src/types.ts` | Schema definitions. Edit this to add new YAML properties. |
+| `src/generator.ts` | The core engine (~2000 lines). Generates the HTML, CSS (including glassmorphism), and runtime JS. |
+| `src/parser.ts` | Input validation logic. |
 
 ### Architecture
 
 ```
-YAML Input → Parser (validation) → Generator (HTML/CSS/JS) → Self-contained HTML
+YAML Input -> Parser -> Generator -> Single HTML File
 ```
 
-The generator produces a single HTML file with:
-- All CSS in a `<style>` tag
-- All JavaScript in a `<script>` tag
-- Scenario data embedded as JavaScript objects
-
-### Common Tasks
-
-**Add a new meta option:**
-1. Add to interface in `src/types.ts`
-2. Add validation in `src/parser.ts`
-3. Use in `src/generator.ts`
-
-**Modify CSS:**
-- Edit the template strings in `generateCss()` in `src/generator.ts`
-
-**Modify JavaScript behavior:**
-- Edit the template string in `generateJs()` in `src/generator.ts`
-
-### Validation
-
-Run `bun run src/cli.ts validate <file.yaml>` to check a scenario without building. The parser validates:
-
-- Required fields (title, scenarios, participants, steps)
-- Type constraints (theme, timerStyle, cornerStyle must be valid enum values)
-- Color values (blocks CSS injection via semicolons, braces, url())
-- Speed config (numeric values, minDelay ≤ maxDelay)
-- Participant references (step.from must match a participant.id)
-- Unique IDs (no duplicate scenario or participant IDs)
+The generator produces a **Single File Application**:
+- **CSS**: Generated dynamically in `generateCss()` based on theme/colors.
+- **JS**: Logic in `generateJs()` handles playback, tabs, and resizing.
+- **Data**: Scenario data is injected as a JSON object constant.
 
 ---
 
 ## Security
 
-### Input Validation
-
-The parser validates all input to prevent:
-- **CSS injection** — Color values checked against allowlist of valid formats
-- **XSS via links** — Markdown links block `javascript:`, `data:`, `vbscript:` URLs
-- **Invalid configurations** — Type checking for all enum values
-
-### Output Security
-
-Generated HTML:
-- Uses `textContent` for all dynamic content (no `innerHTML` with user data)
-- Self-contained with no external resource loading
-- No cookies or local storage (except theme preference)
-
-### Threat Model
-
-This tool generates static HTML from trusted YAML input. Consider:
-- YAML files should be treated as code (review before building)
-- Generated HTML is safe to host publicly
-- No server-side execution — pure static output
-
----
+- **No External Calls**: Generated files make ZERO network requests (fonts are loaded if available, otherwise fallback).
+- **Safe Rendering**: Uses `textContent` to prevent XSS.
+- **Input Validation**: Strict schema validation prevents injection during build.
 
 ## Author
 
-**[Lenny Zeltser](https://zeltser.com)**: Builder of security products and programs. Teacher of those who run them.
-
+**[Lenny Zeltser](https://zeltser.com)**

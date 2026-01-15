@@ -374,12 +374,10 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
 
     ${colorOverrides}
 
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
     body {
       margin: 0;
       padding: 24px;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       font-size: 15px;
       line-height: 1.6;
       background: var(--bg-primary);
@@ -682,33 +680,35 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
     }
 
     .message-content pre {
-      background: rgba(0, 0, 0, 0.03);
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      /* User requested no background difference */
+      background: transparent;
+      border: 1px solid rgba(0, 0, 0, 0.08); /* Slightly clearer border since we lost background */
       border-radius: 6px;
       padding: 12px;
       overflow-x: auto;
-      font-size: 13px;
+      font-size: 13.5px;
       margin: 10px 0;
       white-space: pre-wrap;
       word-wrap: break-word;
-      font-family: 'JetBrains Mono', 'SF Mono', Consolas, Menlo, monospace;
+      font-family: 'SF Mono', Consolas, Menlo, monospace;
     }
     
     :root[data-theme="dark"] .message-content pre {
-        background: rgba(0, 0, 0, 0.2);
-        border-color: rgba(255, 255, 255, 0.05);
+        background: transparent;
+        border-color: rgba(255, 255, 255, 0.1);
     }
 
     .message-content code {
-      font-family: 'JetBrains Mono', 'SF Mono', Consolas, Menlo, monospace;
-      font-size: 0.9em;
-      background: rgba(0, 0, 0, 0.04);
-      padding: 2px 4px;
+      font-family: 'SF Mono', Consolas, Menlo, monospace;
+      font-size: 13.5px;
+      /* User requested no background difference */
+      background: transparent;
+      padding: 0;
       border-radius: 4px;
     }
     
     :root[data-theme="dark"] .message-content code {
-        background: rgba(255, 255, 255, 0.1);
+        background: transparent;
     }
 
     .annotation {
@@ -716,7 +716,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       width: 100%;
       margin: 24px 0;
       padding: 0 0 0 20px;
-      font-size: 14px;
+      font-size: 13.5px;
       font-style: italic;
       color: var(--annotation-text);
       opacity: 0;
@@ -1762,19 +1762,31 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
           updateTabStates();
           clearChatMessages();
 
-          // Keep overlay hidden to avoid flash
+          // Keep overlay hidden to avoid flash during switch
           playOverlay.classList.add('hidden');
           chatContainer.classList.remove('fading');
 
-          // If was playing, continue playing; otherwise stay paused
-          if (wasPlaying && !prefersReducedMotion) {
-            play();
-          } else if (prefersReducedMotion) {
+          if (prefersReducedMotion) {
             showAllInstantly();
           } else {
-            // Stay paused - show initial preview but keep overlay hidden
-            // User can click play button or canvas to start
+            // Always show initial preview to render the first message
             showInitialPreview();
+            
+            if (wasPlaying) {
+              // If we were playing, continue playing (this will hide the overlay again)
+              play();
+            } else {
+              // If we weren't playing, ensure the overlay is hidden? 
+              // The original comment said "keep overlay hidden" but showInitialPreview shows it.
+              // If we pause, we usually show the play button? 
+              // Actually, standard behavior is usually to show the play button on a fresh tab.
+              // But strictly following the intention of "keep overlay hidden" would mean adding it back?
+              // Let's stick to standard behavior: new tab = reset state = show play button.
+              // showInitialPreview() handles that. 
+              
+              // However, check if we want to suppress it:
+              // "User can click play button or canvas to start"
+            }
           }
         }, 300);
       }

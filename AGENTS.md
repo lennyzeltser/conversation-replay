@@ -6,5 +6,6 @@ Before working on this project, review [README.md](./README.md) for:
 - Repository structure and key source files
 - Development commands and architecture
 - Security considerations (input validation, output safety)
+- Key logic: `src/generator.ts` handles the Premium UI (glassmorphism), automatic embedding detection, and multi-scenario logic.
 
 See the **AI Agent Quick Reference** section for file locations and common tasks.
