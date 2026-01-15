@@ -29,6 +29,10 @@
   ],
   "author": "Lenny Zeltser",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lennyzeltser/conversation-replay"
+  },
   "devDependencies": {
     "@types/bun": "latest"
   },
