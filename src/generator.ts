@@ -824,7 +824,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       width: 100%;
       margin: 24px 0;
       padding: 0 0 0 20px;
-      font-size: 15px;
+      font-size: 16px;
       font-style: italic;
       color: var(--annotation-text);
       opacity: 0;
@@ -837,10 +837,9 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       left: 0;
       top: 2px;
       bottom: 2px;
-      width: 3px;
+      width: 4px;
       background: var(--annotation-border);
-      border-radius: 1.5px;
-      opacity: 0.5;
+      border-radius: 2px;
     }
 
     .annotation.visible {
@@ -850,7 +849,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
     }
 
     .annotation-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -860,7 +859,6 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       display: flex;
       align-items: center;
       gap: 6px;
-      opacity: 0.8;
     }
 
     .annotation-content {
@@ -1621,7 +1619,7 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
 
         if (step.footnote) {
           var footnote = document.createElement('p');
-          footnote.style.cssText = 'margin: 8px 0 0 0; font-style: italic; font-size: 12px; color: var(--text-secondary);';
+          footnote.style.cssText = 'margin: 8px 0 0 0; font-style: italic; font-size: 15px; color: var(--text-secondary);';
           footnote.textContent = step.footnote;
           contentWrapper.appendChild(footnote);
         }
