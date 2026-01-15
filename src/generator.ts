@@ -229,13 +229,40 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
     }
 
     @media (max-width: 600px) {
+      .tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 0;
+        /* Hide scrollbars */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+      
+      .tabs::-webkit-scrollbar {
+        display: none;
+      }
+
       .tab {
         padding: 10px 14px;
         font-size: 12px;
-        flex: 1;
+        flex: 0 0 auto; /* Don't shrink, let them scroll */
         text-align: center;
         min-width: 0;
+        white-space: nowrap;
       }
+    }
+    
+    /* In iframe, ensure non-active tabs are visible against potentially dark/complex backgrounds */
+    body.in-iframe .tab:not(.active) {
+       background: rgba(255, 255, 255, 0.5);
+       backdrop-filter: blur(4px);
+       -webkit-backdrop-filter: blur(4px);
+    }
+    
+    :root[data-theme="dark"] body.in-iframe .tab:not(.active) {
+       background: rgba(30, 41, 59, 0.5);
+       color: rgba(248, 250, 252, 0.7);
     }
   ` : '';
 
@@ -592,6 +619,9 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
     .play-overlay-icon {
       width: 64px; /* Slightly smaller for elegance */
       height: 64px;
+      flex-shrink: 0; /* Prevent squishing on small screens */
+      min-width: 64px;
+      min-height: 64px;
       background: white;
       border-radius: 50%;
       display: flex;
@@ -1110,6 +1140,8 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       .play-overlay-icon {
         width: 70px;
         height: 70px;
+        min-width: 70px;
+        min-height: 70px;
       }
 
       .play-overlay-icon svg {
@@ -1129,13 +1161,13 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
         padding: 8px;
       }
 
+      /* Very small phones - keep scrolling tabs instead of stacking */
       .tabs {
-        flex-direction: column;
         gap: 4px;
       }
 
       .tab {
-        width: 100%;
+        /* width: 100%; Removed to prevent full stacking */
         text-align: center;
       }
 
