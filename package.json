@@ -1,6 +1,6 @@
 {
   "name": "conversation-replay",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Create animated conversation demos from YAML for security awareness, IR training, and communication skills education",
   "main": "dist/cli.js",
   "type": "module",
