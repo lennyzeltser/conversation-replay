@@ -235,6 +235,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
         overflow-y: hidden; /* Prevent vertical movement */
         -webkit-overflow-scrolling: touch;
         padding-bottom: 0;
+        margin-left: 0; /* Reset margin on mobile to prevent overflow */
         max-width: 100%; /* Ensure it doesn't overflow parent */
         /* Hide scrollbars */
         scrollbar-width: none;
@@ -1186,8 +1187,9 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
 
       .control-btn.primary {
         order: -1;
-        flex: 1 1 100%;
-        justify-content: center;
+        flex: 0 0 auto;
+        width: 44px;
+        height: 44px;
         margin-bottom: 4px;
       }
     }
