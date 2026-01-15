@@ -232,8 +232,10 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       .tabs {
         flex-wrap: nowrap;
         overflow-x: auto;
+        overflow-y: hidden; /* Prevent vertical movement */
         -webkit-overflow-scrolling: touch;
         padding-bottom: 0;
+        max-width: 100%; /* Ensure it doesn't overflow parent */
         /* Hide scrollbars */
         scrollbar-width: none;
         -ms-overflow-style: none;
@@ -619,9 +621,11 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
     .play-overlay-icon {
       width: 64px; /* Slightly smaller for elegance */
       height: 64px;
-      flex-shrink: 0; /* Prevent squishing on small screens */
+      flex: 0 0 auto; /* Prevent squishing on small screens */
       min-width: 64px;
       min-height: 64px;
+      aspect-ratio: 1/1; /* Enforce square aspect ratio */
+      margin: auto; /* Center in flex container if needed */
       background: white;
       border-radius: 50%;
       display: flex;

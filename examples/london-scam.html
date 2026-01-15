@@ -250,7 +250,7 @@
         display: none;  /* Chrome Safari */
     }
 
-    .chat-container.fading {
+    .chat-container.fading .chat-scroll-area {
       opacity: 0;
     }
 
@@ -308,7 +308,7 @@
       min-height: 0;
       max-height: none !important; /* Remove height constraint in iframe */
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important; /* Subtle shadow in iframe */
-      /* Keep border and background for visual definition */
+      background: var(--bg-chat) !important; /* Ensure opaque background in iframe */
       margin-bottom: clamp(70px, 15vh, 120px); /* Responsive space for fixed controls */
     }
 
@@ -357,6 +357,11 @@
     .play-overlay-icon {
       width: 64px; /* Slightly smaller for elegance */
       height: 64px;
+      flex: 0 0 auto; /* Prevent squishing on small screens */
+      min-width: 64px;
+      min-height: 64px;
+      aspect-ratio: 1/1; /* Enforce square aspect ratio */
+      margin: auto; /* Center in flex container if needed */
       background: white;
       border-radius: 50%;
       display: flex;
@@ -875,6 +880,8 @@
       .play-overlay-icon {
         width: 70px;
         height: 70px;
+        min-width: 70px;
+        min-height: 70px;
       }
 
       .play-overlay-icon svg {
@@ -894,13 +901,13 @@
         padding: 8px;
       }
 
+      /* Very small phones - keep scrolling tabs instead of stacking */
       .tabs {
-        flex-direction: column;
         gap: 4px;
       }
 
       .tab {
-        width: 100%;
+        /* width: 100%; Removed to prevent full stacking */
         text-align: center;
       }
 
@@ -1082,7 +1089,7 @@
                 <a href="https://github.com/lennyzeltser/conversation-replay" target="_blank" rel="noopener noreferrer" class="info-title-link">Conversation Replay</a>
                 <div class="info-meta">
                     <span>Created by <a href="https://zeltser.com" target="_blank" rel="noopener noreferrer" class="info-link">Lenny Zeltser</a></span>
-                    <span>Version 0.1.0</span>
+                    <span>Version 0.1.10</span>
                 </div>
             </div>
         </div>
