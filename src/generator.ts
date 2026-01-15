@@ -657,6 +657,8 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       flex-direction: column;
       gap: 20px;
       padding-bottom: 80px; /* Space for floating controls */
+      padding-left: 32px;   /* Symmetric with right */
+      padding-right: 32px;  /* Clearance for timer circle */
     }
 
     .play-overlay {
@@ -744,8 +746,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       font-weight: 600;
       letter-spacing: 0.02em;
       margin-bottom: 6px;
-      color: var(--text-muted);
-      opacity: 0.8;
+      color: var(--text-secondary);
       display: flex;
       align-items: center;
       gap: 6px;
@@ -1435,6 +1436,7 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
       var isPaused = false;
       var animationTimeout = null;
       var speed = 1;
+      var currentStepBaseDelay = 0; // Base delay before speed adjustment (for mid-playback speed changes)
       var hasStarted = false;
 
       // DOM elements
@@ -1823,6 +1825,7 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
 
         if (currentStepIndex < steps.length) {
           var delay = calculateDelay(step);
+          currentStepBaseDelay = delay * speed; // Store base delay for mid-playback speed changes
           startTimer(delay);
           animationTimeout = setTimeout(showNextStep, delay);
         } else {
@@ -1847,7 +1850,16 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
 
           var steps = getSteps();
           var firstStep = steps[0];
+
+          // Show first step if not already visible (e.g., during auto-advance)
+          if (chatMessages.children.length === 0) {
+            var element = createStepElement(firstStep);
+            element.classList.add('visible');
+            chatMessages.appendChild(element);
+          }
+
           var delay = calculateDelay(firstStep);
+          currentStepBaseDelay = delay * speed; // Store base delay for mid-playback speed changes
           currentStepIndex = 1;
 
           startTimer(delay);
@@ -1878,6 +1890,7 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
           updateButtonStates();
 
           var delay = calculateDelay(steps[0]);
+          currentStepBaseDelay = delay * speed; // Store base delay for mid-playback speed changes
           startTimer(delay);
           animationTimeout = setTimeout(showNextStep, delay);
           return;
@@ -2073,7 +2086,29 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
       }
 
       speedSelect.addEventListener('change', function(e) {
+        var oldSpeed = speed;
         speed = parseFloat(e.target.value);
+
+        // If playing, recalculate and reschedule with new speed
+        if (isPlaying && !isPaused && animationTimeout && currentStepBaseDelay > 0) {
+          var elapsed = Date.now() - timerStartTime;
+          var elapsedBase = elapsed * oldSpeed; // Content time consumed
+          var remainingBase = currentStepBaseDelay - elapsedBase;
+
+          if (remainingBase > 0) {
+            // Cancel current timeout (but keep timer animation running)
+            clearTimeout(animationTimeout);
+
+            // Adjust timer variables so animation continues from current position
+            // progress = elapsed / timerDuration should remain the same
+            timerDuration = currentStepBaseDelay / speed;
+            timerStartTime = Date.now() - (elapsedBase / speed);
+
+            // Reschedule with remaining time at new speed
+            var remainingTime = remainingBase / speed;
+            animationTimeout = setTimeout(showNextStep, remainingTime);
+          }
+        }
       });
 
       // Handle page visibility changes (pause timer animation when tab is hidden)
