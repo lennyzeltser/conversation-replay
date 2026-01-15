@@ -5,6 +5,8 @@
  */
 
 import { parse } from 'yaml';
+import { readFile } from 'node:fs/promises';
+import { existsSync } from 'node:fs';
 import type { Demo, DemoMeta, Scenario, Step, MessageStep, Participant, Theme, ColorConfig, TimerStyle, CornerStyle, SpeedConfig } from './types';
 
 const VALID_THEMES: Theme[] = ['chat', 'email', 'slack', 'terminal', 'generic'];
@@ -418,13 +420,11 @@ function validateSteps(
  * Load and parse a demo from a file path
  */
 export async function loadDemo(filePath: string): Promise<Demo> {
-  const file = Bun.file(filePath);
-
-  if (!(await file.exists())) {
+  if (!existsSync(filePath)) {
     throw new ParseError(`File not found: ${filePath}`, filePath);
   }
 
-  const content = await file.text();
+  const content = await readFile(filePath, 'utf-8');
   return parseDemo(content, filePath);
 }
 

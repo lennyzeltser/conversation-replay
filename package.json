@@ -2,15 +2,21 @@
   "name": "conversation-replay",
   "version": "0.1.0",
   "description": "Create animated conversation demos from YAML for security awareness, IR training, and communication skills education",
-  "module": "src/cli.ts",
+  "main": "dist/cli.js",
   "type": "module",
   "bin": {
-    "conversation-replay": "./src/cli.ts"
+    "conversation-replay": "dist/cli.js"
   },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
     "build": "bun run src/cli.ts build",
     "validate": "bun run src/cli.ts validate",
-    "example": "bun run src/cli.ts build examples/london-scam.yaml -o examples/london-scam.html"
+    "example": "bun run src/cli.ts build examples/london-scam.yaml -o examples/london-scam.html",
+    "build:dist": "bun build src/cli.ts --target=node --outfile=dist/cli.js --packages=bundle",
+    "prepublishOnly": "bun run build:dist"
   },
   "keywords": [
     "conversation",

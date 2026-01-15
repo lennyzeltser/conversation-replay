@@ -10,6 +10,7 @@
 
 const VERSION = '0.1.0';
 
+import { writeFile } from 'node:fs/promises';
 import type { Demo, Scenario, Step, Participant, Theme, BuildOptions, ColorConfig, TimerStyle, CornerStyle, SpeedConfig } from './types';
 
 /**
@@ -2146,6 +2147,6 @@ export async function buildDemo(
   options: Partial<BuildOptions> = {}
 ): Promise<void> {
   const html = generateHtml(demo, { ...options, outputPath });
-  await Bun.write(outputPath, html);
+  await writeFile(outputPath, html, 'utf-8');
 }
 

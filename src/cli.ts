@@ -1,4 +1,4 @@
-#!/usr/bin/env bun
+#!/usr/bin/env node
 /**
  * Conversation Replay - CLI
  *
@@ -40,7 +40,7 @@ const VALID_THEMES = ['chat', 'email', 'slack', 'terminal', 'generic'];
 
 async function main() {
   const { values, positionals } = parseArgs({
-    args: Bun.argv.slice(2),
+    args: process.argv.slice(2),
     options: {
       output: { type: 'string', short: 'o' },
       theme: { type: 'string' },
