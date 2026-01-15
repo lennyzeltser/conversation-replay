@@ -1,6 +1,6 @@
 # Conversation Replay
 
-Create animated replays of text conversations.
+Create annotated replays of text conversations.
 
 After parsing the annotated conversation data you supply in a YAML file, this tool will generate a self-contained embeddable HTML file. The published conversation can help with security awareness training and other communications that involve presenting an annotated text conversation.
 
