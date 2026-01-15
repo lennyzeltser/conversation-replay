@@ -38,7 +38,7 @@ To see it in action, see the replays embedded in the following articles as well 
 
 ### Run Without Installing (Recommended)
 
-The easiest way to use Conversation Replay&mdash;no installation required&mdash;after you create the annotated conversation file demo.yaml:
+The easiest way to use Conversation Replay (no installation required) after you create the annotated conversation file demo.yaml:
 
 ```bash
 # Using npx (comes with Node.js)
@@ -178,16 +178,16 @@ meta:
 ```
 
 Custom colors (New Slate/Indigo Default Palette):
-You can override any color, but the defaults are designed for a premium look:
+You can override any color:
 ```yaml
 meta:
   colors:
     accent: "#4f46e5"            # Indigo 600 (Buttons, links)
     pageBg: "#f8fafc"            # Slate 50 (Page background standalone)
     canvasBg: "#ffffff"          # Chat container background
-    leftBg: "#eef2ff"            # Indigo 50 (Left/User bubble)
+    leftBg: "#eef2ff"            # Indigo 50 (Left bubble)
     leftBorder: "transparent"    # Border for left bubble
-    rightBg: "#f1f5f9"           # Slate 100 (Right/AI bubble)
+    rightBg: "#f1f5f9"           # Slate 100 (Right bubble)
     rightBorder: "transparent"   # Border for right bubble
     tabInactiveColor: "#94a3b8"  # Slate 400
     annotationText: "#475569"    # Slate 600 (Annotation text color)
