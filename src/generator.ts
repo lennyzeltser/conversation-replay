@@ -231,28 +231,20 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
     @media (max-width: 600px) {
       .tabs {
         flex-wrap: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden; /* Prevent vertical movement */
-        -webkit-overflow-scrolling: touch;
-        padding-bottom: 0;
-        margin-left: 0; /* Reset margin on mobile to prevent overflow */
-        max-width: 100%; /* Ensure it doesn't overflow parent */
-        /* Hide scrollbars */
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-      }
-      
-      .tabs::-webkit-scrollbar {
-        display: none;
+        overflow: hidden; /* No scrolling - tabs will truncate */
+        padding: 0 12px; /* Align with canvas border-radius */
+        margin-left: 0;
       }
 
       .tab {
-        padding: 10px 14px;
+        padding: 10px 12px;
         font-size: 12px;
-        flex: 0 0 auto; /* Don't shrink, let them scroll */
+        flex: 1 1 0; /* Shrink equally */
         text-align: center;
-        min-width: 0;
+        min-width: 60px; /* Don't get too small */
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
     
