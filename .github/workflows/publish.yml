@@ -26,8 +26,11 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          registry-url: 'https://registry.npmjs.org'
+          node-version: '22'
 
-      - name: Publish to npm
-        run: npm publish --provenance --access public
+      - name: Publish to npm with OIDC
+        run: |
+          echo "Node version: $(node --version)"
+          echo "npm version: $(npm --version)"
+          npm config set //registry.npmjs.org/:_authToken ""
+          npm publish --provenance --access public --registry https://registry.npmjs.org/
