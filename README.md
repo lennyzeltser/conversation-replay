@@ -6,6 +6,7 @@ After parsing the annotated conversation data you supply in a YAML file, this to
 
 - [Conversation Replay](#conversation-replay)
   - [How This Is Useful](#how-this-is-useful)
+  - [Installation](#installation)
   - [Quick Start](#quick-start)
   - [YAML Schema](#yaml-schema)
     - [Basic Structure](#basic-structure)
@@ -41,18 +42,51 @@ Conversation Replay lets you:
 
 Want to see it in action? Open the pre-generated demo replays [examples/london-scam.html](examples/london-scam.html) or [examples/ir-report.html](examples/ir-report.html) directly in your browser.
 
-## Quick Start
+## Installation
 
-To build your own conversation replay:
+### Run Without Installing (Recommended)
+
+The easiest way to use Conversation Replay—no installation required:
 
 ```bash
-# Prerequisite: Bun (https://bun.sh) or Node.js 18+
+# Using npx (comes with Node.js)
+npx conversation-replay build demo.yaml -o demo.html
 
-# Install dependencies
-bun install
+# Using bunx (comes with Bun)
+bunx conversation-replay build demo.yaml -o demo.html
+```
 
-# Build a demo from YAML
-bun run src/cli.ts build examples/london-scam.yaml -o demo.html
+### Global Install
+
+For frequent use, install globally:
+
+```bash
+# Using npm
+npm install -g conversation-replay
+
+# Using Bun
+bun add -g conversation-replay
+
+# Then run directly
+conversation-replay build demo.yaml -o demo.html
+```
+
+### Install from GitHub
+
+To install the latest development version directly from GitHub:
+
+```bash
+npm install -g github:lennyzeltser/conversation-replay
+```
+
+Note: This requires [Bun](https://bun.sh) to be installed (for the build step).
+
+## Quick Start
+
+Create a YAML file defining your conversation, then generate the HTML:
+
+```bash
+conversation-replay build examples/london-scam.yaml -o demo.html
 ```
 
 Output:
