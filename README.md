@@ -180,6 +180,14 @@ meta:
   hideHeaderInIframe: true       # Hide header when embedded (default: true)
 ```
 
+Timing & Visual:
+```yaml
+meta:
+  timerStyle: circle             # circle | bar (countdown display style)
+  cornerStyle: rounded           # rounded | straight (border radius)
+  initialBlur: 1                 # Blur amount in px for initial play overlay (default: 1)
+```
+
 Custom colors (New Slate/Indigo Default Palette):
 You can override any color, but the defaults are designed for a premium look:
 ```yaml
@@ -193,6 +201,8 @@ meta:
     rightBg: "#f1f5f9"           # Slate 100 (Right/AI bubble)
     rightBorder: "transparent"   # Border for right bubble
     tabInactiveColor: "#94a3b8"  # Slate 400
+    annotationText: "#475569"    # Slate 600 (Annotation text color)
+    annotationBorder: "#cbd5e1"  # Slate 300 (Annotation accent bar)
 ```
 
 ## Output Features
