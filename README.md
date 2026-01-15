@@ -258,6 +258,7 @@ scenarios:
 ```
 
 - **Tabs appear automatically** at the top of the player.
+- **Horizontal scrolling**: When tabs exceed the available width, arrow buttons appear for navigation. Works on desktop and mobile.
 - **Auto-Advance**: If `autoAdvance: true` is set, the player smoothly transitions to the next tab when a scenario finishes.
 
 ## Development

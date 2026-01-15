@@ -1,0 +1,108 @@
+# Test file for mobile tab scrolling (7 scenarios)
+meta:
+  title: "Mobile Tab Scroll Test"
+  description: "Testing horizontal scroll with many tabs"
+  theme: chat
+  autoAdvance: false
+
+scenarios:
+  - id: tab1
+    title: "Introduction"
+    participants:
+      - id: user
+        label: "User"
+        role: left
+      - id: assistant
+        label: "Assistant"
+        role: right
+    steps:
+      - type: message
+        from: user
+        content: "This is tab 1 - Introduction"
+      - type: message
+        from: assistant
+        content: "Welcome! Try scrolling the tabs on mobile."
+
+  - id: tab2
+    title: "Getting Started"
+    participants:
+      - id: user
+        label: "User"
+        role: left
+      - id: assistant
+        label: "Assistant"
+        role: right
+    steps:
+      - type: message
+        from: user
+        content: "This is tab 2 - Getting Started"
+
+  - id: tab3
+    title: "Configuration"
+    participants:
+      - id: user
+        label: "User"
+        role: left
+      - id: assistant
+        label: "Assistant"
+        role: right
+    steps:
+      - type: message
+        from: user
+        content: "This is tab 3 - Configuration"
+
+  - id: tab4
+    title: "Advanced Setup"
+    participants:
+      - id: user
+        label: "User"
+        role: left
+      - id: assistant
+        label: "Assistant"
+        role: right
+    steps:
+      - type: message
+        from: user
+        content: "This is tab 4 - Advanced Setup"
+
+  - id: tab5
+    title: "Troubleshooting"
+    participants:
+      - id: user
+        label: "User"
+        role: left
+      - id: assistant
+        label: "Assistant"
+        role: right
+    steps:
+      - type: message
+        from: user
+        content: "This is tab 5 - Troubleshooting"
+
+  - id: tab6
+    title: "Best Practices"
+    participants:
+      - id: user
+        label: "User"
+        role: left
+      - id: assistant
+        label: "Assistant"
+        role: right
+    steps:
+      - type: message
+        from: user
+        content: "This is tab 6 - Best Practices"
+
+  - id: tab7
+    title: "Conclusion"
+    participants:
+      - id: user
+        label: "User"
+        role: left
+      - id: assistant
+        label: "Assistant"
+        role: right
+    steps:
+      - type: message
+        from: user
+        content: "This is tab 7 - Conclusion (last tab!)"

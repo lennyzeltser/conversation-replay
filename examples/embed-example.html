@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Example Article with Embedded Conversation Replay</title>
+  <style>
+    :root {
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --text-color: #1e293b;
+      --text-secondary: #64748b;
+      --bg-color: #ffffff;
+      --accent-color: #4f46e5;
+      --border-color: #e2e8f0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      font-size: 17px;
+      line-height: 1.7;
+      color: var(--text-color);
+      background: var(--bg-color);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .article-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .article-header {
+      margin-bottom: 32px;
+    }
+
+    .article-title {
+      font-size: 2.25rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin: 0 0 16px 0;
+      letter-spacing: -0.025em;
+    }
+
+    .article-meta {
+      color: var(--text-secondary);
+      font-size: 14px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .article-content p {
+      margin: 0 0 1.5em 0;
+    }
+
+    .article-content h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 2.5rem 0 1rem 0;
+      letter-spacing: -0.02em;
+    }
+
+    .article-content a {
+      color: var(--accent-color);
+      text-decoration: none;
+    }
+
+    .article-content a:hover {
+      text-decoration: underline;
+    }
+
+    /* Iframe embed styling - no container styling, let player blend naturally */
+    .demo-embed {
+      margin: 2rem 0;
+    }
+
+    .demo-embed iframe {
+      display: block;
+      width: 100%;
+      height: 600px;
+      border: none;
+      background: transparent;
+    }
+
+    @media (max-width: 600px) {
+      .article-container {
+        padding: 24px 16px 60px;
+      }
+
+      .article-title {
+        font-size: 1.75rem;
+      }
+
+      .demo-embed iframe {
+        height: 500px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <article class="article-container">
+    <header class="article-header">
+      <h1 class="article-title">Testing Multi-Tab Conversation Replay</h1>
+      <div class="article-meta">
+        <span>5 min read</span>
+        <span>January 2025</span>
+      </div>
+    </header>
+
+    <div class="article-content">
+      <p>
+        This page demonstrates how the Conversation Replay player looks when embedded
+        in an article. The player below shows multiple scenarios using the new tab
+        navigation with horizontal scrolling.
+      </p>
+
+      <h2>Interactive Demo</h2>
+
+      <p>
+        The demo below contains 7 tabs to test the scroll behavior. Try clicking the
+        arrow buttons to navigate between tabs, or swipe on mobile devices.
+      </p>
+
+      <div class="demo-embed">
+        <iframe
+          src="test-many-tabs.html"
+          title="Multi-Tab Conversation Replay Demo"
+          loading="lazy"
+        ></iframe>
+      </div>
+
+      <h2>How It Works</h2>
+
+      <p>
+        When the player detects it's running inside an iframe, it automatically
+        adjusts its styling for seamless embedding. The background becomes transparent,
+        padding is removed, and the player blends naturally with the parent page.
+      </p>
+
+      <p>
+        The tab navigation now supports horizontal scrolling with clear visual
+        indicators. Double-chevron arrows appear when there are more tabs to reveal,
+        making it easy for users to discover all available scenarios.
+      </p>
+    </div>
+  </article>
+</body>
+</html>
