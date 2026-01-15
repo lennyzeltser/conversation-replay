@@ -8,6 +8,8 @@
  * createElement) - no innerHTML with untrusted content.
  */
 
+const VERSION = '0.1.0';
+
 import type { Demo, Scenario, Step, Participant, Theme, BuildOptions, ColorConfig, TimerStyle, CornerStyle, SpeedConfig } from './types';
 
 /**
@@ -486,6 +488,11 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       height: calc(100vh - 48px);
       display: flex;
       flex-direction: column;
+    }
+    
+    .controls-wrapper {
+      position: relative;
+      z-index: 20; /* Ensure controls (and popovers) are above play overlay */
     }
 
     body:not(.in-iframe) .chat-container {
@@ -1146,6 +1153,95 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
         margin-bottom: 4px;
       }
     }
+
+
+
+    /* Info Popover */
+    .info-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    #info-btn {
+      opacity: 0.5;
+      transition: opacity 0.2s ease;
+    }
+
+    #info-btn:hover, #info-btn[aria-expanded="true"] {
+      opacity: 1;
+      background: var(--bg-secondary);
+    }
+
+    .info-popover {
+      position: absolute;
+      bottom: 100%;
+      right: -10px; /* Align near the button */
+      margin-bottom: 12px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      width: 220px;
+      box-shadow: var(--shadow-lg);
+      font-size: 13px;
+      color: var(--text-secondary);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px);
+      transition: all 0.2s ease;
+      z-index: 100;
+      pointer-events: none;
+      text-align: left;
+    }
+
+    .info-popover::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        right: 20px;
+        width: 10px;
+        height: 10px;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
+        transform: rotate(45deg);
+    }
+
+    .info-popover.visible {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .info-title-link {
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .info-title-link:hover {
+      text-decoration: underline;
+    }
+
+    .info-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .info-link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .info-link:hover {
+      text-decoration: underline;
+    }
   `;
 }
 
@@ -1250,6 +1346,8 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
       var timerElement = document.getElementById('timer-element');
       var chatContainer = document.getElementById('chat-container');
       var tabs = document.querySelectorAll('.tab');
+      var infoBtn = document.getElementById('info-btn');
+      var infoPopover = document.getElementById('info-popover');
 
       // Timer animation
       var timerAnimationFrame = null;
@@ -1837,6 +1935,32 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
       playPauseBtn.addEventListener('click', togglePlayPause);
       resetBtn.addEventListener('click', reset);
 
+      // Info popover
+      if (infoBtn && infoPopover) {
+        infoBtn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          var isVisible = infoPopover.classList.contains('visible');
+          if (isVisible) {
+            infoPopover.classList.remove('visible');
+            infoBtn.setAttribute('aria-expanded', 'false');
+          } else {
+            infoPopover.classList.add('visible');
+            infoBtn.setAttribute('aria-expanded', 'true');
+          }
+        });
+
+        // Close when clicking outside
+        document.addEventListener('click', function(e) {
+          if (!infoPopover.contains(e.target) && !infoBtn.contains(e.target)) {
+             infoPopover.classList.remove('visible');
+             infoBtn.setAttribute('aria-expanded', 'false');
+          }
+        });
+        
+        // Close on visual viewport resize (mobile keyboard, etc) or scroll
+        // Optional, but good for cleanliness
+      }
+
       speedSelect.addEventListener('change', function(e) {
         speed = parseFloat(e.target.value);
       });
@@ -1981,6 +2105,23 @@ export function generateHtml(demo: Demo, options: BuildOptions = { outputPath: '
         <div class="divider"></div>
         
         <span class="progress" id="progress"></span>
+
+        <div class="divider"></div>
+
+        <div class="info-container">
+            <button class="control-btn icon-only" id="info-btn" aria-label="About this player" aria-haspopup="true" aria-expanded="false">
+                <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                </svg>
+            </button>
+            <div class="info-popover" id="info-popover">
+                <a href="https://github.com/lennyzeltser/conversation-replay" target="_blank" rel="noopener noreferrer" class="info-title-link">Conversation Replay</a>
+                <div class="info-meta">
+                    <span>Created by <a href="https://zeltser.com" target="_blank" rel="noopener noreferrer" class="info-link">Lenny Zeltser</a></span>
+                    <span>Version ${VERSION}</span>
+                </div>
+            </div>
+        </div>
         </div>
     </div>
 

@@ -1,40 +1,49 @@
 # Conversation Replay
 
-Create premium, animated conversation demos from simple YAML. Perfect for security awareness, IR training, and communication skills education.
+Conversation Replay is a "video" player for conversations.
 
-**"VHS for conversations"** — Define conversations declaratively, generate self-contained HTML demos that play back like high-end video interactions.
+After parsing the annotated conversation data you supply in a YAML file, this tool will generate a self-contained embeddable replay that uses HTML, JavaScript, and CSS. This can be help in security awareness, training, and web publishing situations.
 
----
+- [Conversation Replay](#conversation-replay)
+  - [How This Is Useful](#how-this-is-useful)
+  - [Quick Start](#quick-start)
+  - [YAML Schema](#yaml-schema)
+    - [Basic Structure](#basic-structure)
+    - [Step Types](#step-types)
+    - [Message Options](#message-options)
+    - [Meta Options](#meta-options)
+  - [Output Features](#output-features)
+  - [Embedding in Websites](#embedding-in-websites)
+    - [Automatic "Seamless" Mode](#automatic-seamless-mode)
+    - [Basic Iframe Code](#basic-iframe-code)
+    - [Dark Mode Sync](#dark-mode-sync)
+  - [Multi-Scenario Demos](#multi-scenario-demos)
+  - [Development](#development)
+    - [Repository Structure](#repository-structure)
+    - [Commands](#commands)
+  - [AI Agent Quick Reference](#ai-agent-quick-reference)
+    - [Key Files](#key-files)
+    - [Architecture](#architecture)
+  - [Threat Modeling](#threat-modeling)
+  - [Author](#author)
 
-- [Why This Matters](#why-this-matters)
-- [Quick Start](#quick-start)
-- [YAML Schema](#yaml-schema)
-- [Output Features](#output-features)
-- [Embedding in Websites](#embedding-in-websites)
-- [Multi-Scenario Demos](#multi-scenario-demos)
-- [Development](#development)
-- [AI Agent Quick Reference](#ai-agent-quick-reference)
-- [Security](#security)
-- [Author](#author)
 
----
+## How This Is Useful
 
-## Why This Matters
-
-Security training often involves showing how attacks unfold through conversation — phishing emails, social engineering calls, BEC attempts. Static screenshots lose the temporal element. Video production is time-consuming and hard to update.
+Security training often involves showing how attacks unfold through conversation&mdash;phishing emails, social engineering calls, BEC attempts, scammer chat interactions. Static screenshots lose the temporal element. Video production is time-consuming and hard to update.
 
 Conversation Replay lets you:
 
-- **Define conversations in YAML** — Easy to write, review, and version control
-- **Generate self-contained HTML** — No external dependencies, works offline
-- **Premium Design** — Modern "glassmorphism" UI, beautiful typography, and smooth animations out of the box
-- **Embed anywhere** — Seamlessly integrates into blogs and LMS platforms with **automatic transparency**
+- **Define Conversations in YAML:** Easy to create, annotate, review, and version control
+- **Generate Self-Contained HTML:** No external dependencies, works offline
+- **Slick Design:** Modern UI, nice typography, clean colors, and smooth animations
+- **Embed Anywhere:** Seamlessly integrates into blogs and LMS platforms
+
+Want to see it in action? Open the pre-generated demo replays [examples/london-scam.html](examples/london-scam.html) or [examples/ir-report.html](examples/ir-report.html) directly in your browser.
 
 ## Quick Start
 
-**Want to see it in action first?** Open [examples/london-scam.html](examples/london-scam.html) or [examples/ir-report.html](examples/ir-report.html) directly in your browser.
-
-**To build your own demos:**
+To build your own conversation replay:
 
 ```bash
 # Prerequisite: Bun (https://bun.sh) or Node.js 18+
@@ -61,7 +70,7 @@ Done! Generated demo.html
 open demo.html
 ```
 
-The generated HTML is fully responsive, supports dark mode automatically, and looks great on any device.
+The generated replay is responsive, supports dark mode automatically, and looks nice across various browsers and devices.
 
 ## YAML Schema
 
@@ -123,7 +132,7 @@ scenarios:
 
 ### Meta Options
 
-**Display & Behavior:**
+Display & Behavior:
 ```yaml
 meta:
   description: "Shown below title"
@@ -134,7 +143,7 @@ meta:
   hideHeaderInIframe: true       # Hide header when embedded (default: true)
 ```
 
-**Custom colors (New Slate/Indigo Default Palette):**
+Custom colors (New Slate/Indigo Default Palette):
 You can override any color, but the defaults are designed for a premium look:
 ```yaml
 meta:
@@ -153,19 +162,18 @@ meta:
 
 Generated HTML files include:
 
-- **Premium UI** — Glassmorphism controls, Inter font, and refined shadows.
-- **Zero dependencies** — Everything inlined.
-- **Dark mode** — Automatic system preference detection and sync support.
-- **Seamless Embedding** — Detects iframes and automatically removes padding/backgrounds.
-- **Accessibility** — ARIA labels, keyboard navigation, reduced motion support.
-- **Controls** — Floating glass bar with Play/Pause, Restart, and Speed (0.5x–4x).
+- **Zero Dependencies:** Everything inlined.
+- **Dark Mode:** Automatic system preference detection and sync support.
+- **Seamless Embedding:** Detects iframes and automatically removes padding/backgrounds.
+- **Accessibility:** ARIA labels, keyboard navigation, reduced motion support.
+- **Controls:** Floating glass bar with Play/Pause, Restart, and Speed (0.5x–4x).
 
 ## Embedding in Websites
 
-The player is designed to look perfect when embedded.
+The player is designed to look good when embedded in web pages.
 
 ### Automatic "Seamless" Mode
-When the generated HTML detects it is running inside an `iframe`:
+When the the player detects it is running inside an `iframe`:
 1.  **Removes Padding**: The outer page padding is removed.
 2.  **Transparent Background**: The page background becomes transparent, blending with your website.
 3.  **Hides Scrollbars**: Internal scrollbars are hidden for a "video" look, while keeping content scrollable.
@@ -196,7 +204,7 @@ iframe.contentWindow.postMessage({
 
 ## Multi-Scenario Demos
 
-Create rich, multi-part interactive stories using **Tabs**.
+Create rich, multi-part interactive stories using tabs.
 
 ```yaml
 scenarios:
@@ -234,6 +242,9 @@ conversation-replay/
 ### Commands
 
 ```bash
+# Install dependencies
+bun install
+
 # Build
 bun run src/cli.ts build examples/london-scam.yaml -o demo.html
 
@@ -253,7 +264,7 @@ bun run src/cli.ts build examples/london-scam.yaml -o demo.html --theme email --
 | File | Purpose |
 |------|---------|
 | `src/types.ts` | Schema definitions. Edit this to add new YAML properties. |
-| `src/generator.ts` | The core engine (~2000 lines). Generates the HTML, CSS (including glassmorphism), and runtime JS. |
+| `src/generator.ts` | The core engine. Generates the HTML, CSS, and runtime JavaScript. |
 | `src/parser.ts` | Input validation logic. |
 
 ### Architecture
@@ -262,19 +273,19 @@ bun run src/cli.ts build examples/london-scam.yaml -o demo.html --theme email --
 YAML Input -> Parser -> Generator -> Single HTML File
 ```
 
-The generator produces a **Single File Application**:
+The generator produces a Single File Application:
 - **CSS**: Generated dynamically in `generateCss()` based on theme/colors.
-- **JS**: Logic in `generateJs()` handles playback, tabs, and resizing.
+- **JavaScript**: Logic in `generateJs()` handles playback, tabs, and resizing.
 - **Data**: Scenario data is injected as a JSON object constant.
 
 ---
 
-## Security
+## Threat Modeling
 
-- **No External Calls**: Generated files make ZERO network requests (fonts are loaded if available, otherwise fallback).
-- **Safe Rendering**: Uses `textContent` to prevent XSS.
-- **Input Validation**: Strict schema validation prevents injection during build.
+- **No External Calls**: Generated files make no network requests.
+- **Safe Rendering**: Uses `textContent` to mitigate XSS.
+- **Input Validation**: Strict schema validation mitigates injection during build.
 
 ## Author
 
-**[Lenny Zeltser](https://zeltser.com)**
+**[Lenny Zeltser](https://zeltser.com):** Builder of security products and programs. Teacher of those who run them.
