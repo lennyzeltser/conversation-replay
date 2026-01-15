@@ -16,6 +16,7 @@
     "validate": "bun run src/cli.ts validate",
     "example": "bun run src/cli.ts build examples/london-scam.yaml -o examples/london-scam.html",
     "build:dist": "bun build src/cli.ts --target=node --outfile=dist/cli.js --packages=bundle",
+    "prepare": "bun run build:dist",
     "prepublishOnly": "bun run build:dist"
   },
   "keywords": [
