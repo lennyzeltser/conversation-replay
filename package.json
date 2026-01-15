@@ -1,7 +1,7 @@
 {
   "name": "conversation-replay",
-  "version": "0.1.9",
-  "description": "Create animated text conversation replays",
+  "version": "0.1.10",
+  "description": "Create annotated replays of text conversations",
   "main": "dist/cli.js",
   "type": "module",
   "bin": {

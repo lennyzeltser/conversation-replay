@@ -13,7 +13,7 @@ import { buildDemo } from './generator';
 import type { Theme } from './types';
 
 const HELP = `
-conversation-replay - Create animated conversation demos from YAML
+conversation-replay - Create annotated replays of text conversations from YAML
 
 Usage:
   conversation-replay build <scenario.yaml> -o <output.html> [options]
