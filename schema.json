@@ -1,0 +1,292 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/lennyzeltser/conversation-replay/schema.json",
+  "title": "Conversation Replay Demo",
+  "description": "Schema for conversation-replay YAML configuration files",
+  "type": "object",
+  "required": [
+    "meta",
+    "scenarios"
+  ],
+  "properties": {
+    "meta": {
+      "type": "object",
+      "description": "Demo metadata and configuration",
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Demo title shown in header",
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "description": "Brief description shown below title"
+        },
+        "theme": {
+          "type": "string",
+          "enum": [
+            "chat",
+            "email",
+            "slack",
+            "terminal",
+            "generic"
+          ],
+          "description": "Visual theme for message styling",
+          "default": "chat"
+        },
+        "articleUrl": {
+          "type": "string",
+          "description": "URL for 'View Article' link in header"
+        },
+        "hideHeaderInIframe": {
+          "type": "boolean",
+          "description": "Auto-hide header when embedded in iframe",
+          "default": true
+        },
+        "autoAdvance": {
+          "type": "boolean",
+          "description": "Auto-play next scenario when current one completes"
+        },
+        "annotationLabel": {
+          "type": "string",
+          "description": "Label shown above annotation content",
+          "default": "Behind the Scenes"
+        },
+        "timerStyle": {
+          "type": "string",
+          "enum": [
+            "bar",
+            "circle"
+          ],
+          "description": "Countdown timer display style",
+          "default": "circle"
+        },
+        "cornerStyle": {
+          "type": "string",
+          "enum": [
+            "rounded",
+            "straight"
+          ],
+          "description": "Border radius style for containers and bubbles",
+          "default": "rounded"
+        },
+        "initialBlur": {
+          "type": "number",
+          "description": "Blur amount in pixels for play overlay",
+          "default": 1,
+          "minimum": 0
+        },
+        "colors": {
+          "type": "object",
+          "description": "Custom color overrides",
+          "properties": {
+            "accent": {
+              "type": "string",
+              "description": "Primary accent color (buttons, links)"
+            },
+            "pageBg": {
+              "type": "string",
+              "description": "Page background color"
+            },
+            "canvasBg": {
+              "type": "string",
+              "description": "Chat container background"
+            },
+            "leftBg": {
+              "type": "string",
+              "description": "Left participant bubble background"
+            },
+            "leftBorder": {
+              "type": "string",
+              "description": "Left participant bubble border"
+            },
+            "rightBg": {
+              "type": "string",
+              "description": "Right participant bubble background"
+            },
+            "rightBorder": {
+              "type": "string",
+              "description": "Right participant bubble border"
+            },
+            "tabInactiveColor": {
+              "type": "string",
+              "description": "Inactive tab text color"
+            },
+            "annotationText": {
+              "type": "string",
+              "description": "Annotation text color"
+            },
+            "annotationBorder": {
+              "type": "string",
+              "description": "Annotation accent bar color"
+            }
+          }
+        },
+        "speed": {
+          "type": "object",
+          "description": "Timing configuration for playback",
+          "properties": {
+            "minDelay": {
+              "type": "number",
+              "description": "Minimum delay between steps (ms)",
+              "default": 3000
+            },
+            "maxDelay": {
+              "type": "number",
+              "description": "Maximum delay between steps (ms)",
+              "default": 8000
+            },
+            "msPerWord": {
+              "type": "number",
+              "description": "Milliseconds per word for reading time",
+              "default": 200
+            },
+            "annotationMultiplier": {
+              "type": "number",
+              "description": "Time multiplier for annotations",
+              "default": 1.15
+            },
+            "upNextDelay": {
+              "type": "number",
+              "description": "'Up Next' display duration (ms)",
+              "default": 2500
+            }
+          }
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "description": "One or more conversation scenarios (shown as tabs if multiple)",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "participants",
+          "steps"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for this scenario",
+            "minLength": 1
+          },
+          "title": {
+            "type": "string",
+            "description": "Display title (shown in tab)",
+            "minLength": 1
+          },
+          "participants": {
+            "type": "array",
+            "description": "People/entities in this conversation",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "label"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "description": "Unique identifier (referenced in message 'from' field)"
+                },
+                "label": {
+                  "type": "string",
+                  "description": "Display name shown above messages"
+                },
+                "role": {
+                  "type": "string",
+                  "enum": [
+                    "left",
+                    "right"
+                  ],
+                  "description": "Which side messages appear on",
+                  "default": "left"
+                }
+              }
+            }
+          },
+          "steps": {
+            "type": "array",
+            "description": "Sequence of messages, annotations, and transitions",
+            "minItems": 1,
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "description": "A message from a participant",
+                  "required": [
+                    "type",
+                    "from",
+                    "content"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "message"
+                    },
+                    "from": {
+                      "type": "string",
+                      "description": "Participant ID"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Message text"
+                    },
+                    "codeBlock": {
+                      "type": "string",
+                      "description": "Optional code/preformatted text"
+                    },
+                    "footnote": {
+                      "type": "string",
+                      "description": "Optional italic footnote"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "description": "An educational annotation/callout",
+                  "required": [
+                    "type",
+                    "content"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "annotation"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Annotation text"
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "description": "A scene break/transition",
+                  "required": [
+                    "type",
+                    "content"
+                  ],
+                  "properties": {
+                    "type": {
+                      "const": "transition"
+                    },
+                    "content": {
+                      "type": "string",
+                      "description": "Transition text (e.g., 'Later that day...')"
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

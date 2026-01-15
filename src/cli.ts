@@ -5,12 +5,16 @@
  * Usage:
  *   conversation-replay build <scenario.yaml> -o <output.html>
  *   conversation-replay validate <scenario.yaml>
+ *   conversation-replay init <output.yaml>
+ *   conversation-replay schema [section]
  */
 
 import { parseArgs } from 'util';
 import { loadDemo, ParseError } from './parser';
 import { buildDemo } from './generator';
+import { generateTemplate, getSchemaReference, jsonSchema } from './schema';
 import type { Theme } from './types';
+import packageJson from '../package.json';
 
 const HELP = `
 conversation-replay - Create annotated replays of text conversations from YAML
@@ -18,22 +22,31 @@ conversation-replay - Create annotated replays of text conversations from YAML
 Usage:
   conversation-replay build <scenario.yaml> -o <output.html> [options]
   conversation-replay validate <scenario.yaml>
-  conversation-replay --help
+  conversation-replay init <output.yaml> [--theme <theme>]
+  conversation-replay schema [section] [--json]
+  conversation-replay info
+  conversation-replay --help | --version
 
 Commands:
   build      Generate HTML from a scenario file
   validate   Check a scenario file for errors
+  init       Create a starter YAML template with documentation
+  schema     Show schema reference (sections: meta, colors, speed, steps)
+  info       Show tool name, version, author, and links
 
 Options:
   -o, --output <path>   Output HTML file path (required for build)
   --theme <theme>       Override theme (chat, email, slack, terminal, generic)
   --no-header           Exclude the demo header
+  --json                Output JSON schema (for schema command)
   -h, --help            Show this help message
+  -v, --version         Show version number
 
 Examples:
   conversation-replay build demo.yaml -o demo.html
-  conversation-replay build demo.yaml -o demo.html --theme email
-  conversation-replay validate demo.yaml
+  conversation-replay init my-demo.yaml
+  conversation-replay schema meta
+  conversation-replay info
 `;
 
 const VALID_THEMES = ['chat', 'email', 'slack', 'terminal', 'generic'];
@@ -45,10 +58,17 @@ async function main() {
       output: { type: 'string', short: 'o' },
       theme: { type: 'string' },
       'no-header': { type: 'boolean' },
+      json: { type: 'boolean' },
       help: { type: 'boolean', short: 'h' },
+      version: { type: 'boolean', short: 'v' },
     },
     allowPositionals: true,
   });
+
+  if (values.version) {
+    console.log(`conversation-replay v${packageJson.version}`);
+    process.exit(0);
+  }
 
   if (values.help || positionals.length === 0) {
     console.log(HELP);
@@ -56,10 +76,21 @@ async function main() {
   }
 
   const command = positionals[0];
-  const inputFile = positionals[1];
+  const arg1 = positionals[1];
 
-  if (!inputFile) {
-    console.error('Error: No input file specified\n');
+  // Commands that don't require an input file
+  if (command === 'schema') {
+    handleSchema(arg1, values.json);
+    process.exit(0);
+  }
+
+  if (command === 'info') {
+    handleInfo();
+    process.exit(0);
+  }
+
+  if (!arg1) {
+    console.error('Error: No file specified\n');
     console.log(HELP);
     process.exit(1);
   }
@@ -74,11 +105,15 @@ async function main() {
   try {
     switch (command) {
       case 'build':
-        await handleBuild(inputFile, values);
+        await handleBuild(arg1, values);
         break;
 
       case 'validate':
-        await handleValidate(inputFile);
+        await handleValidate(arg1);
+        break;
+
+      case 'init':
+        await handleInit(arg1, values.theme as Theme | undefined);
         break;
 
       default:
@@ -157,6 +192,51 @@ async function handleValidate(inputFile: string) {
     if (counts.annotation > 0) console.log(`      - Annotations: ${counts.annotation}`);
     if (counts.transition > 0) console.log(`      - Transitions: ${counts.transition}`);
   }
+}
+
+async function handleInit(outputFile: string, theme?: Theme) {
+  const fs = await import('fs/promises');
+
+  // Check if file exists
+  try {
+    await fs.access(outputFile);
+    console.error(`Error: File already exists: ${outputFile}`);
+    console.error('Use a different filename or delete the existing file.');
+    process.exit(1);
+  } catch {
+    // File doesn't exist, good to proceed
+  }
+
+  const template = generateTemplate(theme);
+  await fs.writeFile(outputFile, template, 'utf-8');
+
+  console.log(`Created ${outputFile}`);
+  console.log('');
+  console.log('Next steps:');
+  console.log(`  1. Edit ${outputFile} to define your conversation`);
+  console.log(`  2. Validate: conversation-replay validate ${outputFile}`);
+  console.log(`  3. Build: conversation-replay build ${outputFile} -o output.html`);
+  console.log('');
+  console.log('For schema reference: conversation-replay schema');
+}
+
+function handleInfo() {
+  console.log(`
+Conversation Replay v${packageJson.version}
+https://github.com/lennyzeltser/conversation-replay
+
+Created by Lenny Zeltser
+https://zeltser.com
+`.trim());
+}
+
+function handleSchema(section?: string, outputJson?: boolean) {
+  if (outputJson) {
+    console.log(JSON.stringify(jsonSchema, null, 2));
+    return;
+  }
+
+  console.log(getSchemaReference(section));
 }
 
 main().catch(error => {

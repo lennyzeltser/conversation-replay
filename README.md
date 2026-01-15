@@ -7,6 +7,7 @@ After parsing the annotated conversation data you supply in a YAML file, this to
 - [How This Is Useful](#how-this-is-useful)
 - [Installation](#installation)
 - [Quick Start](#quick-start)
+- [CLI Reference](#cli-reference)
 - [YAML Schema](#yaml-schema)
 - [Output Features](#output-features)
 - [Embedding in Websites](#embedding-in-websites)
@@ -75,30 +76,51 @@ Note: This requires [Bun](https://bun.sh) to be installed (for the build step).
 
 ## Quick Start
 
-Create a YAML file defining your conversation, then generate the HTML:
+Generate a starter template, customize it, then build:
 
 ```bash
-conversation-replay build examples/london-scam.yaml -o demo.html
-```
+# Create a documented template
+conversation-replay init demo.yaml
 
-Output:
-```
-Loading examples/london-scam.yaml...
-Building demo.html...
-Done! Generated demo.html
-  Title: London Scam - Social Engineering Demo
-  Scenarios: 1
-    - London Scam: 17 steps (Matt (compromised account), Rakesh)
-```
+# Edit demo.yaml to define your conversation, then build
+conversation-replay build demo.yaml -o demo.html
 
-```bash
 # Open in browser
 open demo.html
 ```
 
 The generated replay is responsive, supports dark mode automatically, and looks nice across various browsers and devices.
 
+To explore an existing example instead:
+
+```bash
+conversation-replay build examples/london-scam.yaml -o demo.html
+```
+
+## CLI Reference
+
+| Command | Description |
+|---------|-------------|
+| `build <file.yaml> -o <output.html>` | Generate HTML from a YAML file |
+| `validate <file.yaml>` | Check a YAML file for errors |
+| `init <file.yaml>` | Create a starter template with inline documentation |
+| `schema [section]` | Show schema reference (sections: `meta`, `colors`, `speed`, `steps`) |
+| `info` | Show tool name, version, and author |
+| `--version` | Show version number |
+| `--help` | Show help |
+
+Options for `build`:
+- `--theme <theme>` &mdash; Override theme (`chat`, `email`, `slack`, `terminal`, `generic`)
+- `--no-header` &mdash; Exclude the header with title and description
+
+For IDE autocompletion, add this to the top of your YAML file:
+```yaml
+# yaml-language-server: $schema=https://raw.githubusercontent.com/lennyzeltser/conversation-replay/master/schema.json
+```
+
 ## YAML Schema
+
+Run `conversation-replay schema` for a quick reference, or see below for details.
 
 ### Basic Structure
 
@@ -271,8 +293,10 @@ conversation-replay/
 │   ├── cli.ts           # CLI entry point
 │   ├── parser.ts        # YAML parsing & validation
 │   ├── generator.ts     # HTML generation (CSS/JS injection)
+│   ├── schema.ts        # Template generation & schema utilities
 │   └── types.ts         # TypeScript definitions
 ├── examples/            # Demo YAML files
+├── schema.json          # JSON Schema for IDE autocompletion
 └── package.json
 ```
 
@@ -282,14 +306,11 @@ conversation-replay/
 # Install dependencies
 bun install
 
-# Build
+# Run CLI during development
 bun run src/cli.ts build examples/london-scam.yaml -o demo.html
-
-# Validate without building
 bun run src/cli.ts validate examples/london-scam.yaml
-
-# Build with options
-bun run src/cli.ts build examples/london-scam.yaml -o demo.html --theme email --no-header
+bun run src/cli.ts init my-demo.yaml
+bun run src/cli.ts schema
 ```
 
 ---
@@ -303,6 +324,8 @@ bun run src/cli.ts build examples/london-scam.yaml -o demo.html --theme email --
 | `src/types.ts` | Schema definitions. Edit this to add new YAML properties. |
 | `src/generator.ts` | The core engine. Generates the HTML, CSS, and runtime JavaScript. |
 | `src/parser.ts` | Input validation logic. |
+| `src/schema.ts` | Template generation, JSON schema, and CLI schema reference. |
+| `schema.json` | JSON Schema for IDE autocompletion. Regenerate with `schema --json`. |
 
 ### Architecture
 
