@@ -27,10 +27,10 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
 
-      - name: Publish to npm with OIDC
+      - name: Upgrade npm and publish
         run: |
-          echo "Node version: $(node --version)"
+          npm install -g npm@latest
           echo "npm version: $(npm --version)"
-          npm config set //registry.npmjs.org/:_authToken ""
-          npm publish --provenance --access public --registry https://registry.npmjs.org/
+          npm publish --access public
