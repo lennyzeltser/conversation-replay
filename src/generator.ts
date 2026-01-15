@@ -156,6 +156,12 @@ function generateColorOverrides(colors?: ColorConfig): string {
   if (colors.tabInactiveColor) {
     overrides.push(`--tab-inactive-color: ${colors.tabInactiveColor};`);
   }
+  if (colors.annotationText) {
+    overrides.push(`--annotation-text: ${colors.annotationText};`);
+  }
+  if (colors.annotationBorder) {
+    overrides.push(`--annotation-border: ${colors.annotationBorder};`);
+  }
 
   if (overrides.length === 0) return '';
 
@@ -169,10 +175,11 @@ function generateColorOverrides(colors?: ColorConfig): string {
 /**
  * Generate the CSS for the demo player
  */
-function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: ColorConfig, cornerStyle?: CornerStyle): string {
+function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: ColorConfig, cornerStyle?: CornerStyle, initialBlur?: number): string {
   const colorOverrides = generateColorOverrides(colors);
   const radius = cornerStyle === 'straight' ? '0' : '8px';
   const radiusLg = cornerStyle === 'straight' ? '0' : '12px';
+  const blurAmount = initialBlur ?? 1;
 
   const tabCss = hasMultipleScenarios ? `
     /* Tabs - browser-style integrated with canvas */
@@ -191,17 +198,15 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       border: 1px solid transparent;
       border-bottom: none;
       background: transparent;
-      color: var(--tab-inactive-color, var(--text-muted));
+      color: var(--tab-inactive-color, var(--text-secondary));
       border-radius: var(--radius) var(--radius) 0 0;
       cursor: pointer;
       font-size: 13px;
       font-weight: 500;
       transition: all 0.2s;
-      opacity: 0.75;
     }
 
     .tab:hover {
-      opacity: 0.9;
       color: var(--text-primary);
     }
 
@@ -209,7 +214,6 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       background: var(--bg-chat);
       color: var(--text-primary);
       border-color: var(--border-color);
-      opacity: 1;
       position: relative;
     }
 
@@ -281,7 +285,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       
       --annotation-bg: transparent;
       --annotation-border: var(--color-slate-300);
-      --annotation-text: var(--color-slate-500);
+      --annotation-text: var(--color-slate-600);
 
       --transition-bg: var(--color-primary-50);
       --transition-border: var(--color-primary-300);
@@ -319,7 +323,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
         --ai-text: #e2e8f0;
 
         --annotation-border: #475569;
-        --annotation-text: #94a3b8;
+        --annotation-text: #cbd5e1;
 
         --border-color: #334155; /* Slate 700 */
         
@@ -352,7 +356,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
         --ai-text: #e2e8f0;
 
         --annotation-border: #475569;
-        --annotation-text: #94a3b8;
+        --annotation-text: #cbd5e1;
 
         --border-color: #334155; /* Slate 700 */
         
@@ -531,16 +535,15 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
 
     body.in-iframe .chat-wrapper {
         box-shadow: none !important; /* Remove wrapper shadow */
-        background: transparent !important;
     }
 
     body.in-iframe .chat-container {
       flex: 1;
       min-height: 0;
-      box-shadow: none !important; /* Remove heavy shadow in iframe usually */
-      border: none !important;
-      background: transparent !important;
-      border-radius: 0 !important; /* Flatten corners for full bleed if needed, or keep them */
+      max-height: none !important; /* Remove height constraint in iframe */
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important; /* Subtle shadow in iframe */
+      /* Keep border and background for visual definition */
+      margin-bottom: clamp(70px, 15vh, 120px); /* Responsive space for fixed controls */
     }
 
     body.in-iframe .controls-wrapper {
@@ -554,9 +557,6 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       z-index: 20;
     }
 
-    body.in-iframe .play-overlay {
-        border-radius: 0 !important;
-    }
 
     .chat-messages {
       display: flex;
@@ -575,8 +575,8 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       align-items: center;
       justify-content: center;
       background: rgba(255, 255, 255, 0.1); /* Much more transparent */
-      backdrop-filter: blur(1.5px); /* Very subtle blur */
-      -webkit-backdrop-filter: blur(1.5px);
+      backdrop-filter: blur(${blurAmount}px); /* Subtle blur - configurable via initialBlur */
+      -webkit-backdrop-filter: blur(${blurAmount}px);
       border-radius: var(--radius-lg);
       cursor: pointer;
       transition: opacity 0.4s ease;
@@ -601,9 +601,9 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
     }
     
     .play-overlay-icon svg {
-        margin-left: 4px; /* Optical center adjustment for play triangle */
-        width: 20px;
-        height: 20px;
+        margin-left: 5px; /* Optical center adjustment for play triangle */
+        width: 26px;
+        height: 26px;
         fill: var(--accent);
     }
 
@@ -724,7 +724,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       width: 100%;
       margin: 24px 0;
       padding: 0 0 0 20px;
-      font-size: 13.5px;
+      font-size: 15px;
       font-style: italic;
       color: var(--annotation-text);
       opacity: 0;
@@ -754,12 +754,13 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--annotation-border);
+      color: var(--annotation-text);
       margin-bottom: 6px;
       font-style: normal;
       display: flex;
       align-items: center;
       gap: 6px;
+      opacity: 0.8;
     }
 
     .annotation-content {
@@ -858,11 +859,10 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       transition: opacity 0.3s, transform 0.3s;
     }
     
-    /* In iframe, add some breathing room safely away from edges */
+    /* In iframe, match standalone appearance */
     body.in-iframe .controls {
       margin-bottom: 0;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      /* Keep same shadow as standalone for consistency */
     }
     
     :root[data-theme="dark"] .controls {
@@ -871,7 +871,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
     
-    body.in-iframe :root[data-theme="dark"] .controls {
+    :root[data-theme="dark"] body.in-iframe .controls {
         background: rgba(30, 41, 59, 0.9);
     }
 
@@ -2019,7 +2019,7 @@ export function generateHtml(demo: Demo, options: BuildOptions = { outputPath: '
   const timerStyle = demo.meta.timerStyle ?? 'circle';
   const cornerStyle = demo.meta.cornerStyle ?? 'rounded';
 
-  const css = generateCss(theme, hasMultipleScenarios, demo.meta.colors, cornerStyle);
+  const css = generateCss(theme, hasMultipleScenarios, demo.meta.colors, cornerStyle, demo.meta.initialBlur);
   const js = generateJs(demo, timerStyle);
 
   const titleHtml = demo.meta.articleUrl

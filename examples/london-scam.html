@@ -301,16 +301,15 @@
 
     body.in-iframe .chat-wrapper {
         box-shadow: none !important; /* Remove wrapper shadow */
-        background: transparent !important;
     }
 
     body.in-iframe .chat-container {
       flex: 1;
       min-height: 0;
-      box-shadow: none !important; /* Remove heavy shadow in iframe usually */
-      border: none !important;
-      background: transparent !important;
-      border-radius: 0 !important; /* Flatten corners for full bleed if needed, or keep them */
+      max-height: none !important; /* Remove height constraint in iframe */
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important; /* Subtle shadow in iframe */
+      /* Keep border and background for visual definition */
+      margin-bottom: 100px; /* Space for fixed controls */
     }
 
     body.in-iframe .controls-wrapper {
@@ -324,9 +323,6 @@
       z-index: 20;
     }
 
-    body.in-iframe .play-overlay {
-        border-radius: 0 !important;
-    }
 
     .chat-messages {
       display: flex;
@@ -345,8 +341,8 @@
       align-items: center;
       justify-content: center;
       background: rgba(255, 255, 255, 0.1); /* Much more transparent */
-      backdrop-filter: blur(1.5px); /* Very subtle blur */
-      -webkit-backdrop-filter: blur(1.5px);
+      backdrop-filter: blur(0.5px); /* Subtle blur - configurable via initialBlur */
+      -webkit-backdrop-filter: blur(0.5px);
       border-radius: var(--radius-lg);
       cursor: pointer;
       transition: opacity 0.4s ease;
@@ -371,9 +367,9 @@
     }
     
     .play-overlay-icon svg {
-        margin-left: 4px; /* Optical center adjustment for play triangle */
-        width: 20px;
-        height: 20px;
+        margin-left: 5px; /* Optical center adjustment for play triangle */
+        width: 26px;
+        height: 26px;
         fill: var(--accent);
     }
 
@@ -494,7 +490,7 @@
       width: 100%;
       margin: 24px 0;
       padding: 0 0 0 20px;
-      font-size: 13.5px;
+      font-size: 15px;
       font-style: italic;
       color: var(--annotation-text);
       opacity: 0;
@@ -628,11 +624,10 @@
       transition: opacity 0.3s, transform 0.3s;
     }
     
-    /* In iframe, add some breathing room safely away from edges */
+    /* In iframe, match standalone appearance */
     body.in-iframe .controls {
       margin-bottom: 0;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      /* Keep same shadow as standalone for consistency */
     }
     
     :root[data-theme="dark"] .controls {
@@ -641,7 +636,7 @@
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
     
-    body.in-iframe :root[data-theme="dark"] .controls {
+    :root[data-theme="dark"] body.in-iframe .controls {
         background: rgba(30, 41, 59, 0.9);
     }
 

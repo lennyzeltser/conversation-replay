@@ -86,6 +86,10 @@ export interface ColorConfig {
   rightBorder?: string;
   /** Inactive tab text color */
   tabInactiveColor?: string;
+  /** Annotation text color */
+  annotationText?: string;
+  /** Annotation accent/border color */
+  annotationBorder?: string;
 }
 
 /**
@@ -111,6 +115,8 @@ export interface DemoMeta {
   cornerStyle?: CornerStyle;
   /** Speed/timing configuration for frame progression */
   speed?: SpeedConfig;
+  /** Initial blur amount in pixels for the play overlay (default: 1) */
+  initialBlur?: number;
 }
 
 /**
