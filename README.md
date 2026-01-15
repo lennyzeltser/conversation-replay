@@ -1,12 +1,15 @@
 # Conversation Replay
 
-Conversation Replay is a "video" player for conversations.
+Create animated replays of text conversations.
 
-After parsing the annotated conversation data you supply in a YAML file, this tool will generate a self-contained embeddable replay that uses HTML, JavaScript, and CSS. This can be help in security awareness, training, and web publishing situations.
+After parsing the annotated conversation data you supply in a YAML file, this tool will generate a self-contained embeddable HTML file. The published conversation can help with security awareness training and other communications that involve presenting an annotated text conversation.
 
 - [Conversation Replay](#conversation-replay)
   - [How This Is Useful](#how-this-is-useful)
   - [Installation](#installation)
+    - [Run Without Installing (Recommended)](#run-without-installing-recommended)
+    - [Global Install](#global-install)
+    - [Install from GitHub](#install-from-github)
   - [Quick Start](#quick-start)
   - [YAML Schema](#yaml-schema)
     - [Basic Structure](#basic-structure)
@@ -31,7 +34,7 @@ After parsing the annotated conversation data you supply in a YAML file, this to
 
 ## How This Is Useful
 
-Security training often involves showing how attacks unfold through conversation&mdash;phishing emails, social engineering calls, BEC attempts, scammer chat interactions. Static screenshots lose the temporal element. Video production is time-consuming and hard to update.
+Security training often involves showing how attacks unfold through text conversations&mdash;phishing emails, social engineering calls, BEC attempts, scammer chat interactions. Static screenshots lose the temporal element. Video production is time-consuming and hard to update.
 
 Conversation Replay lets you:
 
@@ -40,13 +43,13 @@ Conversation Replay lets you:
 - **Slick Design:** Modern UI, nice typography, clean colors, and smooth animations
 - **Embed Anywhere:** Seamlessly integrates into blogs and LMS platforms
 
-Want to see it in action? Open the pre-generated demo replays [examples/london-scam.html](examples/london-scam.html) or [examples/ir-report.html](examples/ir-report.html) directly in your browser.
+Want to see it in action? Open the pre-generated demo replays [examples/london-scam.html](examples/london-scam.html) or [examples/ir-report.html](examples/ir-report.html) in your browser.
 
 ## Installation
 
 ### Run Without Installing (Recommended)
 
-The easiest way to use Conversation Replay—no installation required:
+The easiest way to use Conversation Replay&mdash;no installation required&mdash;after you create the annotated conversation file demo.yaml:
 
 ```bash
 # Using npx (comes with Node.js)
