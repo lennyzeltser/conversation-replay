@@ -51,7 +51,7 @@
       
       --annotation-bg: transparent;
       --annotation-border: var(--color-slate-300);
-      --annotation-text: var(--color-slate-500);
+      --annotation-text: var(--color-slate-600);
 
       --transition-bg: var(--color-primary-50);
       --transition-border: var(--color-primary-300);
@@ -89,7 +89,7 @@
         --ai-text: #e2e8f0;
 
         --annotation-border: #475569;
-        --annotation-text: #94a3b8;
+        --annotation-text: #cbd5e1;
 
         --border-color: #334155; /* Slate 700 */
         
@@ -122,7 +122,7 @@
         --ai-text: #e2e8f0;
 
         --annotation-border: #475569;
-        --annotation-text: #94a3b8;
+        --annotation-text: #cbd5e1;
 
         --border-color: #334155; /* Slate 700 */
         
@@ -309,7 +309,7 @@
       max-height: none !important; /* Remove height constraint in iframe */
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important; /* Subtle shadow in iframe */
       /* Keep border and background for visual definition */
-      margin-bottom: 100px; /* Space for fixed controls */
+      margin-bottom: clamp(70px, 15vh, 120px); /* Responsive space for fixed controls */
     }
 
     body.in-iframe .controls-wrapper {
@@ -341,8 +341,8 @@
       align-items: center;
       justify-content: center;
       background: rgba(255, 255, 255, 0.1); /* Much more transparent */
-      backdrop-filter: blur(0.5px); /* Subtle blur - configurable via initialBlur */
-      -webkit-backdrop-filter: blur(0.5px);
+      backdrop-filter: blur(1px); /* Subtle blur - configurable via initialBlur */
+      -webkit-backdrop-filter: blur(1px);
       border-radius: var(--radius-lg);
       cursor: pointer;
       transition: opacity 0.4s ease;
@@ -520,12 +520,13 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
-      color: var(--annotation-border);
+      color: var(--annotation-text);
       margin-bottom: 6px;
       font-style: normal;
       display: flex;
       align-items: center;
       gap: 6px;
+      opacity: 0.8;
     }
 
     .annotation-content {
