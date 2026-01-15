@@ -8,9 +8,10 @@
  * createElement) - no innerHTML with untrusted content.
  */
 
-const VERSION = '0.1.0';
-
 import { writeFile } from 'node:fs/promises';
+import packageJson from '../package.json';
+
+const VERSION = packageJson.version;
 import type { Demo, Scenario, Step, Participant, Theme, BuildOptions, ColorConfig, TimerStyle, CornerStyle, SpeedConfig } from './types';
 
 /**
@@ -484,7 +485,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
         display: none;  /* Chrome Safari */
     }
 
-    .chat-container.fading {
+    .chat-container.fading .chat-scroll-area {
       opacity: 0;
     }
 
@@ -542,7 +543,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       min-height: 0;
       max-height: none !important; /* Remove height constraint in iframe */
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important; /* Subtle shadow in iframe */
-      /* Keep border and background for visual definition */
+      background: var(--bg-chat) !important; /* Ensure opaque background in iframe */
       margin-bottom: clamp(70px, 15vh, 120px); /* Responsive space for fixed controls */
     }
 
