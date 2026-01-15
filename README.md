@@ -43,7 +43,11 @@ Conversation Replay lets you:
 - **Slick Design:** Modern UI, nice typography, clean colors, and smooth animations
 - **Embed Anywhere:** Seamlessly integrates into blogs and LMS platforms
 
-Want to see it in action? Open the pre-generated demo replays [examples/london-scam.html](examples/london-scam.html) or [examples/ir-report.html](examples/ir-report.html) in your browser.
+To see it in action, see the replays embedded in the following articles as well as the corresponding files in the [examples folder](examples/).
+
+* [Write Good Incident Response Reports Using Your AI Tool](https://zeltser.com/good-ir-reports-with-ai)
+* [When Bots Chat With Social Network Participants
+](https://zeltser.com/bots-chatting-on-social-networks)
 
 ## Installation
 
