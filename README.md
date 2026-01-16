@@ -4,18 +4,33 @@ Create annotated replays of text conversations.
 
 After parsing the annotated conversation data you supply in a YAML file, this tool will generate a self-contained embeddable HTML file. The published conversation can help with security awareness training and other communications that involve presenting an annotated text conversation.
 
-- [How This Is Useful](#how-this-is-useful)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [CLI Reference](#cli-reference)
-- [YAML Schema](#yaml-schema)
-- [Output Features](#output-features)
-- [Embedding in Websites](#embedding-in-websites)
-- [Multi-Scenario Demos](#multi-scenario-demos)
-- [Development](#development)
-- [AI Agent Quick Reference](#ai-agent-quick-reference)
-- [Threat Modeling](#threat-modeling)
-- [Author](#author)
+- [Conversation Replay](#conversation-replay)
+  - [How This Is Useful](#how-this-is-useful)
+  - [Installation](#installation)
+    - [Run Without Installing (Recommended)](#run-without-installing-recommended)
+    - [Global Install](#global-install)
+    - [Install from GitHub](#install-from-github)
+  - [Quick Start](#quick-start)
+  - [CLI Reference](#cli-reference)
+  - [YAML Schema](#yaml-schema)
+    - [Basic Structure](#basic-structure)
+    - [Step Types](#step-types)
+    - [Message Options](#message-options)
+    - [Meta Options](#meta-options)
+  - [Output Features](#output-features)
+  - [Embedding in Websites](#embedding-in-websites)
+    - [Automatic "Seamless" Mode](#automatic-seamless-mode)
+    - [Basic Iframe Code](#basic-iframe-code)
+    - [Dark Mode Sync](#dark-mode-sync)
+  - [Multi-Scenario Demos](#multi-scenario-demos)
+  - [Development](#development)
+    - [Repository Structure](#repository-structure)
+    - [Commands](#commands)
+  - [AI Agent Quick Reference](#ai-agent-quick-reference)
+    - [Key Files](#key-files)
+    - [Architecture](#architecture)
+  - [Threat Modeling](#threat-modeling)
+  - [Author](#author)
 
 
 ## How This Is Useful
@@ -29,11 +44,7 @@ Conversation Replay lets you:
 - **Slick Design:** Modern UI, nice typography, clean colors, and smooth animations
 - **Embed Anywhere:** Seamlessly integrates into blogs and LMS platforms
 
-To see it in action, see the replays embedded in the following articles as well as the corresponding files in the [examples folder](examples/).
-
-* [Write Good Incident Response Reports Using Your AI Tool](https://zeltser.com/good-ir-reports-with-ai)
-* [When Bots Chat With Social Network Participants
-](https://zeltser.com/bots-chatting-on-social-networks)
+To see it in action, see the replays embedded in [the article that announced this tool](https://zeltser.com/interactive-replays) and the [examples folder](examples/).
 
 ## Installation
 
