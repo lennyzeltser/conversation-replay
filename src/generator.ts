@@ -430,6 +430,21 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
         filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8))
                 drop-shadow(0 0 4px rgba(0, 0, 0, 0.6));
       }
+
+      .play-overlay {
+        background: rgba(30, 41, 59, 0.92); /* Slate 800 - matches --bg-chat */
+        backdrop-filter: blur(4px);
+      }
+
+      .play-overlay-icon {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .play-overlay-icon svg path {
+        fill: #ffffff;
+      }
     }
 
     /* Dark mode via data-theme attribute (for iframe sync with parent) */
@@ -464,7 +479,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
     }
 
     :root[data-theme="dark"] .play-overlay {
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(30, 41, 59, 0.92); /* Slate 800 - matches --bg-chat */
       backdrop-filter: blur(4px);
     }
 
@@ -1405,7 +1420,7 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
         document.documentElement.classList.add('in-iframe');
         document.body.classList.add('in-iframe');
 
-        // Listen for theme changes from parent page
+        // Listen for theme changes from parent page (cross-origin support)
         window.addEventListener('message', function(event) {
           if (event.data && event.data.type === 'theme-change') {
             var theme = event.data.theme;
@@ -1416,6 +1431,35 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
             }
           }
         });
+
+        // For same-origin iframes, directly sync with parent's theme
+        try {
+          var parentDoc = window.parent.document;
+          var parentHtml = parentDoc.documentElement;
+
+          // Initial sync
+          var parentTheme = parentHtml.getAttribute('data-theme');
+          if (parentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          }
+
+          // Watch for changes
+          var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+              if (mutation.attributeName === 'data-theme') {
+                var theme = parentHtml.getAttribute('data-theme');
+                if (theme === 'dark') {
+                  document.documentElement.setAttribute('data-theme', 'dark');
+                } else {
+                  document.documentElement.removeAttribute('data-theme');
+                }
+              }
+            });
+          });
+          observer.observe(parentHtml, { attributes: true, attributeFilter: ['data-theme'] });
+        } catch (e) {
+          // Cross-origin - fall back to postMessage listener (already set up above)
+        }
       }
 
       var header = document.getElementById('demo-header');
