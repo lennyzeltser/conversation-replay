@@ -102,7 +102,7 @@ open demo.html
 
 The generated replay is responsive, supports dark mode automatically, and looks nice across various browsers and devices.
 
-To explore an existing example instead:
+To experiment with an example YAML file instead:
 
 ```bash
 conversation-replay build examples/london-scam.yaml -o demo.html
