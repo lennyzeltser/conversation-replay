@@ -425,6 +425,11 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
         --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
         --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
       }
+
+      .tab-scroll-btn svg {
+        filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8))
+                drop-shadow(0 0 4px rgba(0, 0, 0, 0.6));
+      }
     }
 
     /* Dark mode via data-theme attribute (for iframe sync with parent) */
