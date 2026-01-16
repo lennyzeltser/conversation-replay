@@ -616,7 +616,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       display: flex;
       flex-direction: column;
       background: transparent !important;
-      padding: 0 !important;
+      padding: 0;
       margin: 0 !important;
       border: none !important;
       box-shadow: none !important;
@@ -637,17 +637,14 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       max-height: none !important; /* Remove height constraint in iframe */
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important; /* Subtle shadow in iframe */
       background: var(--bg-chat) !important; /* Ensure opaque background in iframe */
-      margin-bottom: clamp(70px, 15vh, 120px); /* Responsive space for fixed controls */
     }
 
     body.in-iframe .controls-wrapper {
-      position: fixed;
-      bottom: 12px;
-      left: 0;
-      right: 0;
+      position: relative;
+      flex-shrink: 0;
       display: flex;
       justify-content: center;
-      pointer-events: none; /* Let clicks pass through around buttons */
+      padding: 12px 0;
       z-index: 20;
     }
 
@@ -1177,10 +1174,6 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
         min-height: 250px;
       }
 
-      body.in-iframe .chat-container {
-        max-height: 400px;
-      }
-
       .controls {
         gap: 8px;
         padding-top: 12px;
@@ -1239,20 +1232,37 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       }
 
       .controls {
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-wrap: nowrap;
+        gap: 4px;
+        padding: 6px 8px;
+      }
+
+      .controls .divider {
+        display: none; /* Hide dividers to save space */
       }
 
       .control-btn {
-        flex: 0 0 auto;
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        padding: 0;
       }
 
       .control-btn.primary {
-        order: -1;
-        flex: 0 0 auto;
-        width: 44px;
-        height: 44px;
-        margin-bottom: 4px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .speed-select {
+        padding: 6px 8px;
+        min-width: 32px;
+        font-size: 12px;
+      }
+
+      .progress {
+        font-size: 11px;
+        min-width: 36px;
       }
     }
 
