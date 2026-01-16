@@ -563,13 +563,12 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      
+
       font-size: 13px;
       font-weight: 500;
       color: var(--transition-text, var(--text-muted));
       opacity: 0;
       transform: translateY(10px);
-      
       padding: 0 40px;
     }
 
@@ -1119,7 +1118,7 @@
                 <a href="https://github.com/lennyzeltser/conversation-replay" target="_blank" rel="noopener noreferrer" class="info-title-link">Conversation Replay</a>
                 <div class="info-meta">
                     <span>Created by <a href="https://zeltser.com" target="_blank" rel="noopener noreferrer" class="info-link">Lenny Zeltser</a></span>
-                    <span>Version 0.1.16</span>
+                    <span>Version 0.1.17</span>
                 </div>
             </div>
         </div>
@@ -1365,7 +1364,14 @@
       }
 
       function scrollToNewElement(element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        var container = chatMessages.parentElement;
+        var scrollMargin = 8;
+        var elementTop = Math.max(0, element.offsetTop - scrollMargin);
+        if (typeof container.scrollTo === 'function') {
+          container.scrollTo({ top: elementTop, behavior: 'smooth' });
+        } else {
+          container.scrollTop = elementTop;
+        }
       }
 
       function createStepElement(step) {

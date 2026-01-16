@@ -735,7 +735,6 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       opacity: 0;
       transform: translateY(12px) scale(0.98);
       transform-origin: bottom center;
-      scroll-margin-top: 8px;
     }
 
     .message.visible {
@@ -847,7 +846,6 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       color: var(--annotation-text);
       opacity: 0;
       transform: translateY(10px);
-      scroll-margin-top: 8px;
     }
 
     .annotation::before {
@@ -899,8 +897,6 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       color: var(--transition-text, var(--text-muted));
       opacity: 0;
       transform: translateY(10px);
-      scroll-margin-top: 8px;
-
       padding: 0 40px;
     }
 
@@ -935,7 +931,6 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       font-size: 13px;
       opacity: 0;
       transition: opacity 0.4s ease;
-      scroll-margin-top: 8px;
     }
 
     .scenario-ending.visible {
@@ -1618,7 +1613,14 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
       }
 
       function scrollToNewElement(element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        var container = chatMessages.parentElement;
+        var scrollMargin = 8;
+        var elementTop = Math.max(0, element.offsetTop - scrollMargin);
+        if (typeof container.scrollTo === 'function') {
+          container.scrollTo({ top: elementTop, behavior: 'smooth' });
+        } else {
+          container.scrollTop = elementTop;
+        }
       }
 
       function createStepElement(step) {
