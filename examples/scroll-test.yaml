@@ -1,0 +1,52 @@
+# Scroll Test - Long Message Demo
+# Tests that new messages scroll to show the TOP of the bubble
+
+meta:
+  title: "Scroll Test - Long Messages"
+  description: "Testing scroll behavior with long message bubbles"
+  theme: chat
+
+scenarios:
+  - id: main
+    title: "Long Message Test"
+    participants:
+      - id: user
+        label: "User"
+        role: left
+      - id: assistant
+        label: "Assistant"
+        role: right
+    steps:
+      - type: message
+        from: user
+        content: "Can you explain the key principles of secure software development?"
+
+      - type: message
+        from: assistant
+        content: |
+          Here are the fundamental principles of secure software development that every developer should understand and apply throughout the software development lifecycle. These principles form the foundation of building resilient, trustworthy applications.
+
+          1. DEFENSE IN DEPTH - Never rely on a single security control. Layer multiple defenses so that if one fails, others still protect the system. This includes network segmentation, application firewalls, input validation, and encryption.
+
+          2. PRINCIPLE OF LEAST PRIVILEGE - Grant users and processes only the minimum permissions they need to perform their tasks. This limits the potential damage from compromised accounts or vulnerabilities.
+
+          3. FAIL SECURELY - When errors occur, ensure the system fails in a secure state. Don't expose sensitive information in error messages, and don't leave resources in an insecure state after failures.
+
+          4. INPUT VALIDATION - Never trust user input. Validate all input on the server side, use allowlists rather than blocklists, and sanitize data before use in queries or output.
+
+          5. SEPARATION OF DUTIES - Critical operations should require multiple parties. No single person should be able to compromise the entire system.
+
+          6. KEEP SECURITY SIMPLE - Complex security mechanisms are harder to understand, implement correctly, and maintain. Simple designs are more likely to be secure.
+
+          7. FIX SECURITY ISSUES CORRECTLY - When fixing vulnerabilities, understand the root cause. Quick patches often introduce new problems or fail to address the underlying issue.
+
+      - type: annotation
+        content: "The message above is intentionally long to test scroll behavior on mobile devices."
+
+      - type: message
+        from: user
+        content: "That's very helpful, thank you!"
+
+      - type: message
+        from: assistant
+        content: "You're welcome! Remember that security is an ongoing process, not a one-time task."

@@ -735,6 +735,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       opacity: 0;
       transform: translateY(12px) scale(0.98);
       transform-origin: bottom center;
+      scroll-margin-top: 8px;
     }
 
     .message.visible {
@@ -846,6 +847,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       color: var(--annotation-text);
       opacity: 0;
       transform: translateY(10px);
+      scroll-margin-top: 8px;
     }
 
     .annotation::before {
@@ -891,13 +893,14 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       flex-direction: column;
       align-items: center;
       text-align: center;
-      
+
       font-size: 13px;
       font-weight: 500;
       color: var(--transition-text, var(--text-muted));
       opacity: 0;
       transform: translateY(10px);
-      
+      scroll-margin-top: 8px;
+
       padding: 0 40px;
     }
 
@@ -932,6 +935,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       font-size: 13px;
       opacity: 0;
       transition: opacity 0.4s ease;
+      scroll-margin-top: 8px;
     }
 
     .scenario-ending.visible {
@@ -1613,13 +1617,8 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
         }
       }
 
-      function smoothScrollToBottom() {
-        var container = chatMessages.parentElement;
-        if (typeof container.scrollTo === 'function') {
-          container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
-        } else {
-          container.scrollTop = container.scrollHeight;
-        }
+      function scrollToNewElement(element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
       function createStepElement(step) {
@@ -1782,11 +1781,11 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
         if (typeof requestAnimationFrame === 'function') {
           requestAnimationFrame(function() {
             div.classList.add('visible');
-            smoothScrollToBottom();
+            scrollToNewElement(div);
           });
         } else {
           div.classList.add('visible');
-          smoothScrollToBottom();
+          scrollToNewElement(div);
         }
       }
 
@@ -1812,7 +1811,7 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
         // Animate it in
         requestAnimationFrame(function() {
           upNextDiv.classList.add('visible');
-          smoothScrollToBottom();
+          scrollToNewElement(upNextDiv);
         });
 
         // Wait for user to see it, then fade and switch
@@ -1870,11 +1869,11 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
         if (typeof requestAnimationFrame === 'function') {
           requestAnimationFrame(function() {
             element.classList.add('visible');
-            smoothScrollToBottom();
+            scrollToNewElement(element);
           });
         } else {
           element.classList.add('visible');
-          smoothScrollToBottom();
+          scrollToNewElement(element);
         }
 
         currentStepIndex++;
