@@ -779,6 +779,7 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       position: relative;
       line-height: 1.6;
       box-shadow: var(--shadow-sm);
+      overflow-wrap: break-word;
     }
     
     /* Add subtle tails */
