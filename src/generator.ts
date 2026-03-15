@@ -294,6 +294,8 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
       flex-shrink: 0;
       scroll-snap-align: start;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .tab:hover {
