@@ -130,6 +130,13 @@ function validateDemoMeta(raw: unknown, filePath?: string): DemoMeta {
     result.speed = validateSpeedConfig(meta.speed, filePath);
   }
 
+  if (meta.initialBlur !== undefined) {
+    if (typeof meta.initialBlur !== 'number' || !Number.isFinite(meta.initialBlur) || meta.initialBlur < 0) {
+      throw new ParseError('meta.initialBlur must be a non-negative number', filePath);
+    }
+    result.initialBlur = meta.initialBlur;
+  }
+
   return result;
 }
 
