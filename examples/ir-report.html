@@ -340,6 +340,8 @@
       flex-shrink: 0;
       scroll-snap-align: start;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .tab:hover {
@@ -599,6 +601,7 @@
       position: relative;
       line-height: 1.6;
       box-shadow: var(--shadow-sm);
+      overflow-wrap: break-word;
     }
     
     /* Add subtle tails */
@@ -1280,7 +1283,7 @@
                 <a href="https://github.com/lennyzeltser/conversation-replay" target="_blank" rel="noopener noreferrer" class="info-title-link">Conversation Replay</a>
                 <div class="info-meta">
                     <span>Created by <a href="https://zeltser.com" target="_blank" rel="noopener noreferrer" class="info-link">Lenny Zeltser</a></span>
-                    <span>Version 0.1.17</span>
+                    <span>Version 0.1.20</span>
                 </div>
             </div>
         </div>
@@ -1369,7 +1372,8 @@
       }
 
       var header = document.getElementById('demo-header');
-      if (isInIframe && header) {
+      var hideHeaderInIframe = true;
+      if (isInIframe && hideHeaderInIframe && header) {
         header.classList.add('hidden');
       }
 

@@ -97,6 +97,26 @@
         --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3);
         --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.4);
       }
+
+      .tab-scroll-btn svg {
+        filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.8))
+                drop-shadow(0 0 4px rgba(0, 0, 0, 0.6));
+      }
+
+      .play-overlay {
+        background: rgba(30, 41, 59, 0.92); /* Slate 800 - matches --bg-chat */
+        backdrop-filter: blur(4px);
+      }
+
+      .play-overlay-icon {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .play-overlay-icon svg path {
+        fill: #ffffff;
+      }
     }
 
     /* Dark mode via data-theme attribute (for iframe sync with parent) */
@@ -131,7 +151,7 @@
     }
 
     :root[data-theme="dark"] .play-overlay {
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(30, 41, 59, 0.92); /* Slate 800 - matches --bg-chat */
       backdrop-filter: blur(4px);
     }
 
@@ -320,6 +340,8 @@
       flex-shrink: 0;
       scroll-snap-align: start;
       white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .tab:hover {
@@ -436,7 +458,7 @@
       display: flex;
       flex-direction: column;
       background: transparent !important;
-      padding: 0 !important;
+      padding: 0;
       margin: 0 !important;
       border: none !important;
       box-shadow: none !important;
@@ -457,17 +479,14 @@
       max-height: none !important; /* Remove height constraint in iframe */
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05) !important; /* Subtle shadow in iframe */
       background: var(--bg-chat) !important; /* Ensure opaque background in iframe */
-      margin-bottom: clamp(70px, 15vh, 120px); /* Responsive space for fixed controls */
     }
 
     body.in-iframe .controls-wrapper {
-      position: fixed;
-      bottom: 12px;
-      left: 0;
-      right: 0;
+      position: relative;
+      flex-shrink: 0;
       display: flex;
       justify-content: center;
-      pointer-events: none; /* Let clicks pass through around buttons */
+      padding: 12px 0;
       z-index: 20;
     }
 
@@ -477,6 +496,8 @@
       flex-direction: column;
       gap: 20px;
       padding-bottom: 80px; /* Space for floating controls */
+      padding-left: 32px;   /* Symmetric with right */
+      padding-right: 32px;  /* Clearance for timer circle */
     }
 
     .play-overlay {
@@ -564,8 +585,7 @@
       font-weight: 600;
       letter-spacing: 0.02em;
       margin-bottom: 6px;
-      color: var(--text-muted);
-      opacity: 0.8;
+      color: var(--text-secondary);
       display: flex;
       align-items: center;
       gap: 6px;
@@ -581,6 +601,7 @@
       position: relative;
       line-height: 1.6;
       box-shadow: var(--shadow-sm);
+      overflow-wrap: break-word;
     }
     
     /* Add subtle tails */
@@ -643,7 +664,7 @@
       width: 100%;
       margin: 24px 0;
       padding: 0 0 0 20px;
-      font-size: 15px;
+      font-size: 16px;
       font-style: italic;
       color: var(--annotation-text);
       opacity: 0;
@@ -656,10 +677,9 @@
       left: 0;
       top: 2px;
       bottom: 2px;
-      width: 3px;
+      width: 4px;
       background: var(--annotation-border);
-      border-radius: 1.5px;
-      opacity: 0.5;
+      border-radius: 2px;
     }
 
     .annotation.visible {
@@ -669,7 +689,7 @@
     }
 
     .annotation-label {
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.05em;
@@ -679,7 +699,6 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      opacity: 0.8;
     }
 
     .annotation-content {
@@ -695,13 +714,12 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      
+
       font-size: 13px;
       font-weight: 500;
       color: var(--transition-text, var(--text-muted));
       opacity: 0;
       transform: translateY(10px);
-      
       padding: 0 40px;
     }
 
@@ -998,10 +1016,6 @@
         min-height: 250px;
       }
 
-      body.in-iframe .chat-container {
-        max-height: 400px;
-      }
-
       .controls {
         gap: 8px;
         padding-top: 12px;
@@ -1060,20 +1074,37 @@
       }
 
       .controls {
-        flex-wrap: wrap;
-        justify-content: center;
+        flex-wrap: nowrap;
+        gap: 4px;
+        padding: 6px 8px;
+      }
+
+      .controls .divider {
+        display: none; /* Hide dividers to save space */
       }
 
       .control-btn {
-        flex: 0 0 auto;
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        padding: 0;
       }
 
       .control-btn.primary {
-        order: -1;
-        flex: 0 0 auto;
-        width: 44px;
-        height: 44px;
-        margin-bottom: 4px;
+        width: 40px;
+        height: 40px;
+      }
+
+      .speed-select {
+        padding: 6px 8px;
+        min-width: 32px;
+        font-size: 12px;
+      }
+
+      .progress {
+        font-size: 11px;
+        min-width: 36px;
       }
     }
 
@@ -1256,7 +1287,7 @@
                 <a href="https://github.com/lennyzeltser/conversation-replay" target="_blank" rel="noopener noreferrer" class="info-title-link">Conversation Replay</a>
                 <div class="info-meta">
                     <span>Created by <a href="https://zeltser.com" target="_blank" rel="noopener noreferrer" class="info-link">Lenny Zeltser</a></span>
-                    <span>Version 0.1.13</span>
+                    <span>Version 0.1.20</span>
                 </div>
             </div>
         </div>
@@ -1302,7 +1333,7 @@
         document.documentElement.classList.add('in-iframe');
         document.body.classList.add('in-iframe');
 
-        // Listen for theme changes from parent page
+        // Listen for theme changes from parent page (cross-origin support)
         window.addEventListener('message', function(event) {
           if (event.data && event.data.type === 'theme-change') {
             var theme = event.data.theme;
@@ -1313,10 +1344,40 @@
             }
           }
         });
+
+        // For same-origin iframes, directly sync with parent's theme
+        try {
+          var parentDoc = window.parent.document;
+          var parentHtml = parentDoc.documentElement;
+
+          // Initial sync
+          var parentTheme = parentHtml.getAttribute('data-theme');
+          if (parentTheme === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          }
+
+          // Watch for changes
+          var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+              if (mutation.attributeName === 'data-theme') {
+                var theme = parentHtml.getAttribute('data-theme');
+                if (theme === 'dark') {
+                  document.documentElement.setAttribute('data-theme', 'dark');
+                } else {
+                  document.documentElement.removeAttribute('data-theme');
+                }
+              }
+            });
+          });
+          observer.observe(parentHtml, { attributes: true, attributeFilter: ['data-theme'] });
+        } catch (e) {
+          // Cross-origin - fall back to postMessage listener (already set up above)
+        }
       }
 
       var header = document.getElementById('demo-header');
-      if (isInIframe && header) {
+      var hideHeaderInIframe = true;
+      if (isInIframe && hideHeaderInIframe && header) {
         header.classList.add('hidden');
       }
 
@@ -1382,6 +1443,7 @@
       var isPaused = false;
       var animationTimeout = null;
       var speed = 1;
+      var currentStepBaseDelay = 0; // Base delay before speed adjustment (for mid-playback speed changes)
       var hasStarted = false;
 
       // DOM elements
@@ -1501,12 +1563,14 @@
         }
       }
 
-      function smoothScrollToBottom() {
+      function scrollToNewElement(element) {
         var container = chatMessages.parentElement;
+        var scrollMargin = 8;
+        var elementTop = Math.max(0, element.offsetTop - scrollMargin);
         if (typeof container.scrollTo === 'function') {
-          container.scrollTo({ top: container.scrollHeight, behavior: 'smooth' });
+          container.scrollTo({ top: elementTop, behavior: 'smooth' });
         } else {
-          container.scrollTop = container.scrollHeight;
+          container.scrollTop = elementTop;
         }
       }
 
@@ -1566,7 +1630,7 @@
 
         if (step.footnote) {
           var footnote = document.createElement('p');
-          footnote.style.cssText = 'margin: 8px 0 0 0; font-style: italic; font-size: 12px; color: var(--text-secondary);';
+          footnote.style.cssText = 'margin: 8px 0 0 0; font-style: italic; font-size: 15px; color: var(--text-secondary);';
           footnote.textContent = step.footnote;
           contentWrapper.appendChild(footnote);
         }
@@ -1670,11 +1734,11 @@
         if (typeof requestAnimationFrame === 'function') {
           requestAnimationFrame(function() {
             div.classList.add('visible');
-            smoothScrollToBottom();
+            scrollToNewElement(div);
           });
         } else {
           div.classList.add('visible');
-          smoothScrollToBottom();
+          scrollToNewElement(div);
         }
       }
 
@@ -1700,7 +1764,7 @@
         // Animate it in
         requestAnimationFrame(function() {
           upNextDiv.classList.add('visible');
-          smoothScrollToBottom();
+          scrollToNewElement(upNextDiv);
         });
 
         // Wait for user to see it, then fade and switch
@@ -1758,11 +1822,11 @@
         if (typeof requestAnimationFrame === 'function') {
           requestAnimationFrame(function() {
             element.classList.add('visible');
-            smoothScrollToBottom();
+            scrollToNewElement(element);
           });
         } else {
           element.classList.add('visible');
-          smoothScrollToBottom();
+          scrollToNewElement(element);
         }
 
         currentStepIndex++;
@@ -1770,6 +1834,7 @@
 
         if (currentStepIndex < steps.length) {
           var delay = calculateDelay(step);
+          currentStepBaseDelay = delay * speed; // Store base delay for mid-playback speed changes
           startTimer(delay);
           animationTimeout = setTimeout(showNextStep, delay);
         } else {
@@ -1794,7 +1859,16 @@
 
           var steps = getSteps();
           var firstStep = steps[0];
+
+          // Show first step if not already visible (e.g., during auto-advance)
+          if (chatMessages.children.length === 0) {
+            var element = createStepElement(firstStep);
+            element.classList.add('visible');
+            chatMessages.appendChild(element);
+          }
+
           var delay = calculateDelay(firstStep);
+          currentStepBaseDelay = delay * speed; // Store base delay for mid-playback speed changes
           currentStepIndex = 1;
 
           startTimer(delay);
@@ -1825,6 +1899,7 @@
           updateButtonStates();
 
           var delay = calculateDelay(steps[0]);
+          currentStepBaseDelay = delay * speed; // Store base delay for mid-playback speed changes
           startTimer(delay);
           animationTimeout = setTimeout(showNextStep, delay);
           return;
@@ -2020,7 +2095,29 @@
       }
 
       speedSelect.addEventListener('change', function(e) {
+        var oldSpeed = speed;
         speed = parseFloat(e.target.value);
+
+        // If playing, recalculate and reschedule with new speed
+        if (isPlaying && !isPaused && animationTimeout && currentStepBaseDelay > 0) {
+          var elapsed = Date.now() - timerStartTime;
+          var elapsedBase = elapsed * oldSpeed; // Content time consumed
+          var remainingBase = currentStepBaseDelay - elapsedBase;
+
+          if (remainingBase > 0) {
+            // Cancel current timeout (but keep timer animation running)
+            clearTimeout(animationTimeout);
+
+            // Adjust timer variables so animation continues from current position
+            // progress = elapsed / timerDuration should remain the same
+            timerDuration = currentStepBaseDelay / speed;
+            timerStartTime = Date.now() - (elapsedBase / speed);
+
+            // Reschedule with remaining time at new speed
+            var remainingTime = remainingBase / speed;
+            animationTimeout = setTimeout(showNextStep, remainingTime);
+          }
+        }
       });
 
       // Handle page visibility changes (pause timer animation when tab is hidden)

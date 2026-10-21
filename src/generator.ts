@@ -27,16 +27,46 @@ function escapeHtml(text: string): string {
 }
 
 /**
- * Validate URL is safe (not javascript:, data:, etc.)
+ * Serialize a value as JSON that is safe to embed inside an inline <script>.
+ *
+ * The HTML tokenizer ends script data at "</script" (and treats "<!--"
+ * specially) no matter what JavaScript context it appears in, so a YAML
+ * string containing "</script>" would otherwise close the player's script and
+ * let the rest of the string run as markup. "<", ">" and "&" are therefore
+ * written as JavaScript unicode escapes, which JSON.parse and JS string
+ * literals both read back as the original characters. U+2028 and U+2029 are
+ * escaped because older engines treat them as line terminators in literals.
  */
-function isSafeUrl(url: string): boolean {
-  const trimmed = url.trim().toLowerCase();
-  // Block dangerous protocols
-  if (trimmed.startsWith('javascript:')) return false;
-  if (trimmed.startsWith('data:')) return false;
-  if (trimmed.startsWith('vbscript:')) return false;
-  // Allow http, https, mailto, tel, and relative URLs
-  return true;
+const SCRIPT_UNSAFE_CHARS = new RegExp(
+  '[<>&' + String.fromCharCode(0x2028) + String.fromCharCode(0x2029) + ']',
+  'g'
+);
+
+export function jsonForScript(value: unknown): string {
+  return JSON.stringify(value).replace(SCRIPT_UNSAFE_CHARS, (ch) =>
+    '\\u' + ch.charCodeAt(0).toString(16).padStart(4, '0')
+  );
+}
+
+/**
+ * Validate that a URL from the YAML file is safe to emit as an href.
+ *
+ * Resolves the value the way a browser would (the WHATWG URL parser strips
+ * ASCII tab and newline anywhere in the input, strips leading and trailing
+ * control characters, and lowercases the scheme) and then allows only the
+ * listed protocols. Relative URLs, fragments, and protocol-relative URLs
+ * inherit the https: base and pass. Anything the parser rejects is unsafe.
+ */
+const SAFE_URL_PROTOCOLS = ['http:', 'https:', 'mailto:', 'tel:'];
+
+export function isSafeUrl(url: string): boolean {
+  let parsed: URL;
+  try {
+    parsed = new URL(url, 'https://relative.invalid/');
+  } catch {
+    return false;
+  }
+  return SAFE_URL_PROTOCOLS.includes(parsed.protocol);
 }
 
 /**
@@ -44,12 +74,14 @@ function isSafeUrl(url: string): boolean {
  * Text is HTML-escaped first, then links are converted.
  * Dangerous URLs (javascript:, data:, etc.) are rendered as plain text.
  */
-function parseMarkdownLinks(text: string): string {
+export function parseMarkdownLinks(text: string): string {
   return escapeHtml(text).replace(
     /\[([^\]]+)\]\(([^)]+)\)/g,
     (match, linkText, url) => {
+      // Both linkText and url are already HTML-escaped by escapeHtml above,
+      // so they are inserted as-is (escaping again would double "&amp;").
       if (isSafeUrl(url)) {
-        return `<a href="${escapeHtml(url)}">${linkText}</a>`;
+        return `<a href="${url}">${linkText}</a>`;
       }
       // Render dangerous URLs as plain text (already escaped)
       return match;
@@ -67,25 +99,25 @@ function stepsToJs(scenario: Scenario): string {
 
   const jsSteps = scenario.steps.map(step => {
     if (step.type === 'annotation') {
-      return `{ type: "annotation", plainText: ${JSON.stringify(step.content)} }`;
+      return `{ type: "annotation", plainText: ${jsonForScript(step.content)} }`;
     }
 
     if (step.type === 'transition') {
-      return `{ type: "transition", plainText: ${JSON.stringify(step.content)} }`;
+      return `{ type: "transition", plainText: ${jsonForScript(step.content)} }`;
     }
 
     // Message step
     const participant = participantMap.get(step.from)!;
     const role = participant.role === 'left' ? 'user' : 'ai';
 
-    let js = `{ type: ${JSON.stringify(role)}, plainText: ${JSON.stringify(step.content)}`;
+    let js = `{ type: ${jsonForScript(role)}, plainText: ${jsonForScript(step.content)}`;
 
     if (step.codeBlock) {
-      js += `, codeBlock: ${JSON.stringify(step.codeBlock)}`;
+      js += `, codeBlock: ${jsonForScript(step.codeBlock)}`;
     }
 
     if (step.footnote) {
-      js += `, footnote: ${JSON.stringify(step.footnote)}`;
+      js += `, footnote: ${jsonForScript(step.footnote)}`;
     }
 
     js += ' }';
@@ -115,9 +147,9 @@ function generateScenariosJs(demo: Demo): string {
   const scenarioEntries = demo.scenarios.map(scenario => {
     const labels = getParticipantLabels(scenario);
     return `
-        ${JSON.stringify(scenario.id)}: {
-          title: ${JSON.stringify(scenario.title)},
-          labels: { user: ${JSON.stringify(labels.left)}, ai: ${JSON.stringify(labels.right)} },
+        ${jsonForScript(scenario.id)}: {
+          title: ${jsonForScript(scenario.title)},
+          labels: { user: ${jsonForScript(labels.left)}, ai: ${jsonForScript(labels.right)} },
           steps: ${stepsToJs(scenario)}
         }`;
   });
@@ -1384,11 +1416,12 @@ function generateCss(theme: Theme, hasMultipleScenarios: boolean, colors?: Color
  */
 function generateJs(demo: Demo, timerStyle: TimerStyle): string {
   const scenariosJs = generateScenariosJs(demo);
-  const scenarioOrder = JSON.stringify(demo.scenarios.map(s => s.id));
+  const scenarioOrder = jsonForScript(demo.scenarios.map(s => s.id));
   const autoAdvance = demo.meta.autoAdvance !== false;
   const hasMultipleScenarios = demo.scenarios.length > 1;
   const annotationLabel = demo.meta.annotationLabel ?? 'Behind the Scenes';
   const useCircleTimer = timerStyle === 'circle';
+  const hideHeaderInIframe = demo.meta.hideHeaderInIframe !== false;
 
   return `
     (function() {
@@ -1465,12 +1498,13 @@ function generateJs(demo: Demo, timerStyle: TimerStyle): string {
       }
 
       var header = document.getElementById('demo-header');
-      if (isInIframe && header) {
+      var hideHeaderInIframe = ${hideHeaderInIframe};
+      if (isInIframe && hideHeaderInIframe && header) {
         header.classList.add('hidden');
       }
 
       // Configurable annotation label
-      var annotationLabel = ${JSON.stringify(annotationLabel)};
+      var annotationLabel = ${jsonForScript(annotationLabel)};
 
       // Scenarios data
       var scenarios = ${scenariosJs};
@@ -2306,7 +2340,7 @@ export function generateHtml(demo: Demo, options: BuildOptions = { outputPath: '
   const css = generateCss(theme, hasMultipleScenarios, demo.meta.colors, cornerStyle, demo.meta.initialBlur);
   const js = generateJs(demo, timerStyle);
 
-  const titleHtml = demo.meta.articleUrl
+  const titleHtml = demo.meta.articleUrl && isSafeUrl(demo.meta.articleUrl)
     ? `<a href="${escapeHtml(demo.meta.articleUrl)}" class="demo-title-link">${escapeHtml(demo.meta.title)}</a>`
     : escapeHtml(demo.meta.title);
 

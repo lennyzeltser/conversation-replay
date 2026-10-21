@@ -18,7 +18,8 @@
     "example": "bun run src/cli.ts build examples/london-scam.yaml -o examples/london-scam.html",
     "build:dist": "bun build src/cli.ts --target=node --outfile=dist/cli.js --packages=bundle",
     "prepare": "bun run build:dist",
-    "prepublishOnly": "bun run build:dist"
+    "prepublishOnly": "bun run build:dist",
+    "test": "bun test"
   },
   "keywords": [
     "conversation",
@@ -42,6 +43,6 @@
     "typescript": "^5"
   },
   "dependencies": {
-    "yaml": "^2.8.2"
+    "yaml": "^2.8.3"
   }
 }

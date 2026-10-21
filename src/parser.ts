@@ -217,7 +217,8 @@ function validateColors(raw: unknown, filePath?: string): ColorConfig {
 
   const colorFields: (keyof ColorConfig)[] = [
     'accent', 'pageBg', 'canvasBg', 'leftBg', 'leftBorder',
-    'rightBg', 'rightBorder', 'tabInactiveColor'
+    'rightBg', 'rightBorder', 'tabInactiveColor',
+    'annotationText', 'annotationBorder'
   ];
 
   for (const field of colorFields) {
@@ -232,7 +233,7 @@ function validateColors(raw: unknown, filePath?: string): ColorConfig {
           filePath
         );
       }
-      result[field] = colorValue;
+      result[field] = colorValue.trim();
     }
   }
 
